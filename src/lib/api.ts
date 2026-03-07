@@ -59,6 +59,21 @@ export async function postVenta(body: { items: { id: number; nombre: string; pre
   return res.json();
 }
 
+export type VentaItemEdit = { id: number; nombre: string; precio: number; cantidad: number; costo?: number };
+
+export async function putVenta(ventaId: number, body: { items: VentaItemEdit[] }) {
+  const res = await fetch(`${BASE}/api/ventas/${ventaId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error((data as { error?: string }).error || 'Error al actualizar venta');
+  }
+  return res.json();
+}
+
 export type DevolucionItem = { productoId: number; nombre: string; cantidad: number; precio: number; tipo: 'revendible' | 'perdida' };
 export type Devolucion = { id: number; fecha: string; ventaId: number; items: DevolucionItem[] };
 export type PerdidaItem = { id: number; fecha: string; ventaId: number; productoId: number; nombre: string; cantidad: number; precio: number; valorPerdida: number };

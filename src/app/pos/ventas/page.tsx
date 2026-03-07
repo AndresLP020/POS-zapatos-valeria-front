@@ -2,14 +2,14 @@
 
 import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { getVentas, getDevoluciones, getPerdidas, postDevolucion, getProductos, type Devolucion, type PerdidaItem, type Producto } from '@/lib/api';
+import { getVentas, getDevoluciones, getPerdidas, postDevolucion, getProductos, putVenta, type Devolucion, type PerdidaItem, type Producto, type VentaItemEdit } from '@/lib/api';
 import { formatearMoneda, formatearCantidad } from '@/lib/utils';
 
 type Venta = {
   id: number;
   fecha: string;
   total: number;
-  items: { id?: number; nombre: string; cantidad: number; precio: number }[];
+  items: { id?: number; nombre: string; cantidad: number; precio: number; costo?: number }[];
   cliente?: string;
 };
 
@@ -45,6 +45,9 @@ function VentasPageContent() {
   const [productos, setProductos] = useState<{ id: number; nombre: string; precio: number; stock: number; esGranel?: boolean }[]>([]);
   const [modalDevolucion, setModalDevolucion] = useState<{ ventaId: number | null; items: ItemDevolucionEdit[] } | null>(null);
   const [enviandoDevolucion, setEnviandoDevolucion] = useState(false);
+  const [modalEditarVenta, setModalEditarVenta] = useState<{ venta: Venta; items: VentaItemEdit[] } | null>(null);
+  const [enviandoEditar, setEnviandoEditar] = useState(false);
+  const [productosParaAgregar, setProductosParaAgregar] = useState<Producto[]>([]);
 
   useEffect(() => {
     const v = searchParams.get('vista');
@@ -230,6 +233,75 @@ function VentasPageContent() {
       alert((e as Error).message);
     } finally {
       setEnviandoDevolucion(false);
+    }
+  };
+
+  const abrirEditarTicket = (venta: Venta) => {
+    const items: VentaItemEdit[] = (venta.items || []).map((i) => ({
+      id: i.id ?? 0,
+      nombre: i.nombre,
+      precio: i.precio,
+      cantidad: i.cantidad,
+      costo: i.costo,
+    }));
+    setModalEditarVenta({ venta, items });
+    getProductos().then(setProductosParaAgregar).catch(() => setProductosParaAgregar([]));
+  };
+
+  const actualizarItemEditar = (idx: number, upd: Partial<VentaItemEdit>) => {
+    setModalEditarVenta((prev) => {
+      if (!prev) return null;
+      const next = [...prev.items];
+      next[idx] = { ...next[idx], ...upd };
+      return { ...prev, items: next };
+    });
+  };
+
+  const quitarItemEditar = (idx: number) => {
+    setModalEditarVenta((prev) => {
+      if (!prev) return null;
+      const next = prev.items.filter((_, i) => i !== idx);
+      if (next.length === 0) return prev;
+      return { ...prev, items: next };
+    });
+  };
+
+  const agregarProductoATicket = (p: Producto) => {
+    setModalEditarVenta((prev) => {
+      if (!prev) return null;
+      const nuevo: VentaItemEdit = {
+        id: p.id,
+        nombre: p.nombre,
+        precio: p.precio,
+        cantidad: 1,
+        costo: p.costo,
+      };
+      const existente = prev.items.findIndex((i) => i.id === p.id);
+      let items: VentaItemEdit[];
+      if (existente >= 0) {
+        items = prev.items.map((it, i) => (i === existente ? { ...it, cantidad: it.cantidad + 1 } : it));
+      } else {
+        items = [...prev.items, nuevo];
+      }
+      return { ...prev, items };
+    });
+  };
+
+  const guardarEditarTicket = async () => {
+    if (!modalEditarVenta) return;
+    if (modalEditarVenta.items.length === 0) {
+      alert('El ticket debe tener al menos un producto.');
+      return;
+    }
+    setEnviandoEditar(true);
+    try {
+      await putVenta(modalEditarVenta.venta.id, { items: modalEditarVenta.items });
+      setModalEditarVenta(null);
+      cargarVentas();
+    } catch (e) {
+      alert((e as Error).message);
+    } finally {
+      setEnviandoEditar(false);
     }
   };
 
@@ -452,7 +524,19 @@ function VentasPageContent() {
                   {/* Detalles expandidos */}
                   {estaExpandida && (
                     <div className="border-t border-slate-700 bg-slate-900/50 p-4">
-                      <h4 className="text-sm font-semibold text-slate-300 mb-3">Productos vendidos:</h4>
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="text-sm font-semibold text-slate-300">Productos vendidos:</h4>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); abrirEditarTicket(venta); }}
+                          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium transition"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                          Editar ticket
+                        </button>
+                      </div>
                       <div className="space-y-2">
                         {venta.items?.map((item, idx) => (
                           <div key={idx} className="flex items-center justify-between py-2 px-3 rounded-lg bg-slate-800/50">
@@ -647,6 +731,87 @@ function VentasPageContent() {
               </button>
               <button type="button" onClick={enviarDevolucion} disabled={enviandoDevolucion} className="px-4 py-2 rounded-xl bg-green-500 text-white hover:bg-green-600 disabled:opacity-50">
                 {enviandoDevolucion ? 'Procesando…' : 'Registrar devolución'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Editar ticket */}
+      {modalEditarVenta && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => !enviandoEditar && setModalEditarVenta(null)}>
+          <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-white">Editar ticket #{modalEditarVenta.venta.id}</h2>
+              <button type="button" onClick={() => !enviandoEditar && setModalEditarVenta(null)} className="p-1 text-slate-400 hover:text-white">×</button>
+            </div>
+            <div className="p-4 flex-1 overflow-auto space-y-4">
+              <p className="text-slate-400 text-sm">Modifica precio, cantidad, agrega o quita productos. El total y las ganancias se actualizarán al guardar.</p>
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium text-slate-300">Productos en el ticket</h3>
+                {modalEditarVenta.items.map((item, idx) => (
+                  <div key={`${item.id}-${idx}`} className="flex flex-wrap items-center gap-3 p-3 rounded-xl bg-slate-700/50 border border-slate-600">
+                    <div className="flex-1 min-w-[140px]">
+                      <p className="text-white font-medium text-sm">{item.nombre}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <label className="text-slate-400 text-xs">Precio</label>
+                      <input
+                        type="number"
+                        min={0}
+                        step={0.01}
+                        value={item.precio}
+                        onChange={(e) => actualizarItemEditar(idx, { precio: Math.max(0, Number(e.target.value) || 0) })}
+                        className="w-20 rounded-lg bg-slate-700 border border-slate-600 text-white px-2 py-1.5 text-sm"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <label className="text-slate-400 text-xs">Cant.</label>
+                      <input
+                        type="number"
+                        min={1}
+                        value={item.cantidad}
+                        onChange={(e) => actualizarItemEditar(idx, { cantidad: Math.max(1, Math.floor(Number(e.target.value) || 1)) })}
+                        className="w-16 rounded-lg bg-slate-700 border border-slate-600 text-white px-2 py-1.5 text-sm"
+                      />
+                    </div>
+                    <span className="text-slate-300 text-sm tabular-nums">= ${formatearMoneda(item.precio * item.cantidad)}</span>
+                    <button type="button" onClick={() => quitarItemEditar(idx)} className="p-1.5 rounded-lg text-red-400 hover:bg-red-500/20" title="Quitar producto">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="pt-2 border-t border-slate-700">
+                <h3 className="text-sm font-medium text-slate-300 mb-2">Agregar producto al ticket</h3>
+                <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
+                  {productosParaAgregar.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => agregarProductoATicket(p)}
+                      className="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm border border-slate-600"
+                    >
+                      {p.nombre} — ${formatearMoneda(p.precio)} (stock: {p.stock ?? 0})
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="pt-4 border-t border-slate-700 flex justify-between items-center">
+                <span className="text-slate-400">Nuevo total:</span>
+                <span className="text-xl font-bold text-green-400">
+                  ${formatearMoneda(modalEditarVenta.items.reduce((s, i) => s + i.precio * i.cantidad, 0))}
+                </span>
+              </div>
+            </div>
+            <div className="p-4 border-t border-slate-700 flex gap-3 justify-end">
+              <button type="button" onClick={() => !enviandoEditar && setModalEditarVenta(null)} className="px-4 py-2 rounded-xl bg-slate-700 text-slate-300 hover:bg-slate-600">
+                Cancelar
+              </button>
+              <button type="button" onClick={guardarEditarTicket} disabled={enviandoEditar} className="px-4 py-2 rounded-xl bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-50">
+                {enviandoEditar ? 'Guardando…' : 'Guardar cambios'}
               </button>
             </div>
           </div>
