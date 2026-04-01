@@ -6,7 +6,6 @@ import {
   getVentas,
   getProductos,
   getNominas,
-  getMovimientosLienzo,
   postGastoAdmin,
   putGastoAdmin,
   deleteGastoAdmin,
@@ -29,7 +28,6 @@ export default function GastosAdminPage() {
   const [ventas, setVentas] = useState<VentaConItems[]>([]);
   const [productos, setProductos] = useState<Producto[]>([]);
   const [nominas, setNominas] = useState<{ fecha: string; total: number }[]>([]);
-  const [movimientosLienzo, setMovimientosLienzo] = useState<{ fecha: string; tipo: string; monto: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [categoriaFiltro, setCategoriaFiltro] = useState<string>('Todos');
   const [periodoResumen, setPeriodoResumen] = useState<PeriodoResumen>('mensual');
@@ -42,24 +40,21 @@ export default function GastosAdminPage() {
   const cargarDatos = useCallback(async () => {
     setLoading(true);
     try {
-      const [g, v, p, n, lienzo] = await Promise.all([
+      const [g, v, p, n] = await Promise.all([
         getGastosAdmin(),
         getVentas(),
         getProductos(),
         getNominas(),
-        getMovimientosLienzo().catch(() => []),
       ]);
       setGastos(g);
       setVentas(v);
       setProductos(p);
       setNominas(n);
-      setMovimientosLienzo(lienzo);
     } catch {
       setGastos([]);
       setVentas([]);
       setProductos([]);
       setNominas([]);
-      setMovimientosLienzo([]);
     } finally {
       setLoading(false);
     }
@@ -98,14 +93,7 @@ export default function GastosAdminPage() {
     return d >= inicioMes && d <= finMes;
   });
   const ingresosMes = ventasEsteMes.reduce((s, v) => s + (v.pagado ?? v.total ?? 0), 0);
-  const ingresosLienzoMes = movimientosLienzo
-    .filter((m) => m.tipo === 'ingreso')
-    .filter((m) => {
-      const d = new Date(m.fecha);
-      return d >= inicioMes && d <= finMes;
-    })
-    .reduce((s, m) => s + m.monto, 0);
-  const ingresosTotalesMes = ingresosMes + ingresosLienzoMes;
+  const ingresosTotalesMes = ingresosMes;
   // Costo de lo vendido (costo de productos). Usar costo guardado en ítem o, si no, costo actual del producto.
   const costoVentasMes = ventasEsteMes.reduce((sum, venta) => {
     const porcentajePagado = venta.total > 0 ? (venta.pagado ?? venta.total) / venta.total : 1;
@@ -115,7 +103,7 @@ export default function GastosAdminPage() {
     }, 0);
   }, 0);
   const gananciaBrutaMes = ingresosTotalesMes - costoVentasMes;
-  // Fórmula unificada: Ganancia neta = Ingresos (ventas + Lienzo Charro) − Costo ventas − Gastos Admin − Nóminas
+  // Fórmula unificada: Ganancia neta = Ingresos ventas − Costo ventas − Gastos Admin − Nóminas
   const gananciaNetaMes = gananciaBrutaMes - totalGastosMes - totalNominasMes;
   const efectivoDisponible = gananciaNetaMes;
   const efectivoBajo = efectivoDisponible < 0 || (ingresosTotalesMes === 0 && (gastos.length > 0 || nominas.length > 0));
@@ -135,7 +123,6 @@ export default function GastosAdminPage() {
     'Servicios básicos de casa',
     'Compras familiares',
     'seguros, Hacienda (SAT)',
-    'Lienzo Charro',
   ];
   const gastosPorCategoria =
     categoriaFiltro === 'Todos'
@@ -307,7 +294,7 @@ export default function GastosAdminPage() {
           <div className="rounded-2xl bg-slate-800/80 border border-emerald-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Ingresos Mensuales</p>
             <p className="text-2xl font-bold text-emerald-400 mt-1 tabular-nums">{fm(ingresosTotalesMes)}</p>
-            <p className="text-xs text-slate-500 mt-1">Ventas + Lienzo Charro del mes</p>
+            <p className="text-xs text-slate-500 mt-1">Ventas pagadas del mes</p>
           </div>
           <div className="rounded-2xl bg-slate-800/80 border border-amber-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Costo de Ventas</p>

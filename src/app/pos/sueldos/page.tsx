@@ -7,7 +7,6 @@ import {
   getProductos,
   getNominas,
   getGastosAdmin,
-  getMovimientosLienzo,
   getAdelantos,
   postEmpleado,
   putEmpleado,
@@ -52,7 +51,6 @@ export default function SueldosPage() {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [nominas, setNominas] = useState<{ id: number; fecha: string; total: number; items: { empleadoId: number; monto: number; semana?: string; adelantoDescontado?: number }[] }[]>([]);
   const [gastosAdmin, setGastosAdmin] = useState<{ fecha: string; monto: number }[]>([]);
-  const [movimientosLienzo, setMovimientosLienzo] = useState<{ fecha: string; tipo: string; monto: number }[]>([]);
   const [adelantos, setAdelantos] = useState<Adelanto[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalTrabajador, setModalTrabajador] = useState(false);
@@ -72,13 +70,12 @@ export default function SueldosPage() {
   const cargarDatos = useCallback(async () => {
     setLoading(true);
     try {
-      const [e, v, p, n, g, lienzo, a] = await Promise.all([
+      const [e, v, p, n, g, a] = await Promise.all([
         getEmpleados(),
         getVentas(),
         getProductos(),
         getNominas(),
         getGastosAdmin(),
-        getMovimientosLienzo().catch(() => []),
         getAdelantos(),
       ]);
       setEmpleados(e);
@@ -86,7 +83,6 @@ export default function SueldosPage() {
       setProductos(p);
       setNominas(n);
       setGastosAdmin(g);
-      setMovimientosLienzo(lienzo);
       setAdelantos(a);
     } catch {
       setEmpleados([]);
@@ -94,7 +90,6 @@ export default function SueldosPage() {
       setProductos([]);
       setNominas([]);
       setGastosAdmin([]);
-      setMovimientosLienzo([]);
       setAdelantos([]);
     } finally {
       setLoading(false);
@@ -116,14 +111,7 @@ export default function SueldosPage() {
     (s, v) => s + (v.pagado ?? v.total ?? 0),
     0
   );
-  const ingresosLienzoSemana = movimientosLienzo
-    .filter((m) => m.tipo === 'ingreso')
-    .filter((m) => {
-      const d = new Date(m.fecha);
-      return d >= inicioSemana && d <= ahora;
-    })
-    .reduce((s, m) => s + m.monto, 0);
-  const ingresosTotalesSemanales = ingresosSemanales + ingresosLienzoSemana;
+  const ingresosTotalesSemanales = ingresosSemanales;
 
   const costosSemanales = ventasSemanales.reduce((sum, venta) => {
     const porcentaje = venta.total > 0 ? (venta.pagado ?? venta.total) / venta.total : 1;
@@ -184,7 +172,7 @@ export default function SueldosPage() {
     return map;
   })();
 
-  // Misma fórmula que Gastos Admin y Reportes: Ingresos (ventas + Lienzo Charro) − Costo ventas − Gastos Admin − Nóminas
+  // Misma fórmula que Gastos Admin y Reportes: Ingresos ventas − Costo ventas − Gastos Admin − Nóminas
   const gananciaNetaSemanal = ingresosTotalesSemanales - costosSemanales - totalGastosAdminSemana - totalNominasPagadasSemana;
   const efectivoDisponible = gananciaNetaSemanal;
   const efectivoBajo = efectivoDisponible < 0 || (ingresosTotalesSemanales === 0 && (empleados.length > 0 || gastosAdmin.length > 0));

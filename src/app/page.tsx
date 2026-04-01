@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '@/lib/api';
 import { setPosSession } from '@/lib/auth-session';
+import { GridScan } from '@/components/GridScan';
 
 export default function HomePage() {
   const router = useRouter();
@@ -33,30 +34,50 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-emerald-50/30 px-4 py-12">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-100/40 via-transparent to-transparent pointer-events-none" />
-      
-      <div className="w-full max-w-[420px] relative">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#030712] px-4 py-12">
+      <div className="absolute inset-0 z-0">
+        <GridScan
+          sensitivity={0.55}
+          lineThickness={1}
+          linesColor="#2e4a8f"
+          gridScale={0.13}
+          scanColor="#8ec5ff"
+          scanOpacity={0.45}
+          enablePost
+          bloomIntensity={0.7}
+          chromaticAberration={0.002}
+          noiseIntensity={0.01}
+          enableWebcam={false}
+          showPreview={false}
+          enableGyro={false}
+          scanOnClick={false}
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/35 via-slate-950/55 to-slate-950/85" />
+
+      <div className="w-full max-w-[420px] relative z-10">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-elevated-lg mb-5 ring-4 ring-emerald-500/10">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-elevated-lg mb-5 ring-4 ring-blue-400/30">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800">Punto de Venta</h1>
-          <p className="text-slate-500 mt-1.5 text-sm font-medium">Tenis y zapatos</p>
-          <p className="text-slate-400 text-xs mt-1">Inventario y ventas por pieza</p>
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white animate-pulse drop-shadow-[0_0_18px_rgba(96,165,250,0.65)]">
+            Punto de Venta <span className="text-cyan-300">Domking</span>
+          </h1>
+          <p className="text-blue-200/90 mt-2 text-sm font-medium">Tenis y zapatos</p>
+          <p className="text-slate-300 text-xs mt-1">Inventario y ventas por pieza</p>
         </div>
 
-        <div className="bg-white/95 backdrop-blur rounded-2xl shadow-elevated-lg border border-slate-200/80 p-8">
-          <div className="border-b border-slate-100 pb-6 mb-6">
-            <h2 className="text-lg font-semibold text-slate-800">Iniciar sesión</h2>
-            <p className="text-slate-500 text-sm mt-1">Ingrese sus credenciales para continuar</p>
+        <div className="bg-blue-950/55 backdrop-blur-xl rounded-2xl shadow-elevated-lg border border-blue-700/40 p-8">
+          <div className="border-b border-blue-800/50 pb-6 mb-6">
+            <h2 className="text-lg font-semibold text-white">Iniciar sesión</h2>
+            <p className="text-blue-200/80 text-sm mt-1">Ingrese sus credenciales para continuar</p>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="usuario" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="usuario" className="block text-sm font-medium text-blue-100 mb-2">
                 Usuario
               </label>
               <input
@@ -64,7 +85,7 @@ export default function HomePage() {
                 type="text"
                 value={usuario}
                 onChange={(e) => setUsuario(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition text-slate-800 placeholder-slate-400"
+                className="w-full px-4 py-3 rounded-xl border border-blue-700/50 bg-blue-900/35 focus:bg-blue-900/50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30 outline-none transition text-white placeholder-blue-300/60"
                 placeholder="Ej. administrador"
                 autoComplete="username"
                 disabled={loading}
@@ -72,7 +93,7 @@ export default function HomePage() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-blue-100 mb-2">
                 Contraseña
               </label>
               <input
@@ -80,7 +101,7 @@ export default function HomePage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition text-slate-800 placeholder-slate-400"
+                className="w-full px-4 py-3 rounded-xl border border-blue-700/50 bg-blue-900/35 focus:bg-blue-900/50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30 outline-none transition text-white placeholder-blue-300/60"
                 placeholder="••••••••"
                 autoComplete="current-password"
                 disabled={loading}
@@ -98,18 +119,15 @@ export default function HomePage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-b from-emerald-500 to-emerald-600 text-white font-semibold shadow-md hover:from-emerald-600 hover:to-emerald-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-b from-blue-500 to-indigo-600 text-white font-semibold shadow-md hover:from-blue-600 hover:to-indigo-700 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent transition disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
           
-          <p className="mt-6 text-center text-xs text-slate-400 bg-slate-50 rounded-lg px-3 py-2">
-            Credenciales: usuario <strong>admin</strong>, contraseña configurada en el servidor.
-          </p>
         </div>
 
-        <p className="mt-8 text-center text-xs text-slate-400 font-medium">
+        <p className="mt-8 text-center text-xs text-slate-300 font-medium">
           Sistema de punto de venta · Versión 1.0
         </p>
       </div>

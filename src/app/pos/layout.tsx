@@ -9,7 +9,7 @@ import { useRouter, usePathname } from 'next/navigation';
 
 const FloatingLines = dynamic(() => import('@/components/FloatingLines'), { ssr: false });
 
-const RUTAS_SOLO_ADMIN = ['/pos/gastos-admin', '/pos/deudas', '/pos/sueldos', '/pos/reportes', '/pos/lienzo-charro', '/pos/ventas', '/pos/configuracion'];
+const RUTAS_SOLO_ADMIN = ['/pos/gastos-admin', '/pos/deudas', '/pos/sueldos', '/pos/reportes', '/pos/ventas', '/pos/configuracion'];
 
 function AdminRouteGuard() {
   const pathname = usePathname();

@@ -238,43 +238,6 @@ export async function postMovimientoProveedor(body: {
   return res.json();
 }
 
-// Lienzo Charro: ingresos (renta caballos) y gastos (mantención)
-export type MovimientoLienzo = {
-  id: number;
-  fecha: string;
-  tipo: 'ingreso' | 'gasto';
-  descripcion: string;
-  monto: number;
-};
-
-export async function getMovimientosLienzo(): Promise<MovimientoLienzo[]> {
-  const res = await fetch(`${BASE}/api/lienzo-charro`);
-  if (!res.ok) throw new Error('Error al cargar movimientos Lienzo Charro');
-  return res.json();
-}
-
-export async function postMovimientoLienzo(body: {
-  fecha?: string;
-  tipo: 'ingreso' | 'gasto';
-  descripcion?: string;
-  monto: number;
-}): Promise<MovimientoLienzo> {
-  const res = await fetch(`${BASE}/api/lienzo-charro`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error((data as { error?: string }).error || 'Error al registrar movimiento');
-  }
-  return res.json();
-}
-
-export async function deleteMovimientoLienzo(id: number): Promise<void> {
-  const res = await fetch(`${BASE}/api/lienzo-charro/${id}`, { method: 'DELETE' });
-  if (!res.ok) throw new Error('Error al eliminar movimiento');
-}
 
 export async function postProducto(body: { nombre: string; codigo?: string; categoria: string; precio: number; costo?: number; stock?: number; stockMinimo?: number; estado?: string; proveedorId?: number }) {
   const res = await fetch(`${BASE}/api/productos`, {
@@ -344,7 +307,6 @@ export const CATEGORIAS_GASTOS = [
   'Servicios básicos de casa',
   'Compras familiares',
   'seguros, Hacienda (SAT)',
-  'Lienzo Charro',
   'Gastos de la empresa',
 ] as const;
 

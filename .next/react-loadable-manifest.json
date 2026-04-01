@@ -1,8 +1,18 @@
 {
   "app\\pos\\layout.tsx -> @/components/FloatingLines": {
-    "id": "app\\pos\\layout.tsx -> @/components/FloatingLines",
+    "id": 2349,
     "files": [
-      "static/chunks/_app-pages-browser_src_components_FloatingLines_tsx.js"
+      "static/chunks/bd904a5c-9dd7192cdd6f8727.js",
+      "static/chunks/b536a0f1-00f32e4dd6d210f4.js",
+      "static/chunks/349.7a05da28deb59787.js"
+    ]
+  },
+  "components\\GridScan.tsx -> face-api.js": {
+    "id": 4378,
+    "files": [
+      "static/chunks/3c932782.f49d8504ee175dc2.js",
+      "static/chunks/431.3c2aba298da59302.js",
+      "static/chunks/489.154621a6d9856ff4.js"
     ]
   }
 }
