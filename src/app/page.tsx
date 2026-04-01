@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '@/lib/api';
+import { setPosSession } from '@/lib/auth-session';
 
 export default function HomePage() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function HomePage() {
     setLoading(true);
     try {
       await login(user, pass);
+      setPosSession();
       router.push('/pos/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Usuario o contraseña incorrectos');
@@ -42,8 +44,8 @@ export default function HomePage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-800">Punto de Venta</h1>
-          <p className="text-slate-500 mt-1.5 text-sm font-medium">Juan Mejía</p>
-          <p className="text-slate-400 text-xs mt-1">Sistema de gestión comercial</p>
+          <p className="text-slate-500 mt-1.5 text-sm font-medium">Tenis y zapatos</p>
+          <p className="text-slate-400 text-xs mt-1">Inventario y ventas por pieza</p>
         </div>
 
         <div className="bg-white/95 backdrop-blur rounded-2xl shadow-elevated-lg border border-slate-200/80 p-8">

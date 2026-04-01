@@ -41,8 +41,6 @@ export default function POSPage() {
   const [loading, setLoading] = useState(true);
   const [enviando, setEnviando] = useState(false);
   const [montoPagado, setMontoPagado] = useState<string>('');
-  const [productoGranelModal, setProductoGranelModal] = useState<Producto | null>(null);
-  const [granelKg, setGranelKg] = useState<string>('1');
   const codigoInputRef = useRef<HTMLInputElement>(null);
   const busquedaTimeoutRef = useRef<NodeJS.Timeout>();
 
@@ -82,12 +80,7 @@ export default function POSPage() {
     if (!codigo.trim()) return;
     try {
       const producto = await getProductoPorCodigo(codigo);
-      if (producto.esGranel) {
-        setGranelKg('1');
-        setProductoGranelModal(producto);
-      } else {
-        agregarAlCarrito(producto);
-      }
+      agregarAlCarrito(producto);
       setCodigoBarras('');
     } catch {
       // Producto no encontrado
@@ -115,46 +108,23 @@ export default function POSPage() {
     };
   }, [busqueda, productos]);
 
-  const agregarAlCarrito = (p: Producto, precioModificado?: number, cantidadKg?: number) => {
+  const agregarAlCarrito = (p: Producto, precioModificado?: number) => {
     const stockDisponible = typeof p.stock === 'number' ? p.stock : 0;
     if (stockDisponible <= 0) return;
-    if (p.esGranel) {
-      if (cantidadKg == null || cantidadKg <= 0) {
-        setGranelKg('1');
-        setProductoGranelModal(p);
-        return;
+    setCarrito((prev) => {
+      const i = prev.findIndex((x) => x.producto.id === p.id);
+      const precioVenta = precioModificado ?? p.precio;
+      if (i >= 0) {
+        const copy = [...prev];
+        if (copy[i].cantidad >= stockDisponible) return prev;
+        copy[i].cantidad++;
+        copy[i].precioVenta = precioVenta;
+        return copy;
       }
-      const kg = Math.min(cantidadKg, stockDisponible);
-      setCarrito((prev) => {
-        const i = prev.findIndex((x) => x.producto.id === p.id);
-        const precioVenta = precioModificado ?? p.precio;
-        if (i >= 0) {
-          const copy = [...prev];
-          const nuevoTotal = copy[i].cantidad + kg;
-          copy[i].cantidad = Math.min(nuevoTotal, stockDisponible);
-          copy[i].precioVenta = precioVenta;
-          return copy;
-        }
-        return [...prev, { producto: p, cantidad: kg, precioVenta }];
-      });
-    } else {
-      setCarrito((prev) => {
-        const i = prev.findIndex((x) => x.producto.id === p.id);
-        const precioVenta = precioModificado ?? p.precio;
-        if (i >= 0) {
-          const copy = [...prev];
-          if (copy[i].cantidad >= stockDisponible) return prev;
-          copy[i].cantidad++;
-          copy[i].precioVenta = precioVenta;
-          return copy;
-        }
-        return [...prev, { producto: p, cantidad: 1, precioVenta }];
-      });
-    }
+      return [...prev, { producto: p, cantidad: 1, precioVenta }];
+    });
     setProductoEncontrado(null);
     setBusqueda('');
-    setProductoGranelModal(null);
-    setGranelKg('1');
   };
 
   const quitarDelCarrito = (id: number) => {
@@ -163,7 +133,7 @@ export default function POSPage() {
       if (i < 0) return prev;
       const copy = [...prev];
       const item = copy[i];
-      const paso = item.producto.esGranel ? 0.1 : 1;
+      const paso = 1;
       if (item.cantidad <= paso) return copy.filter((_, j) => j !== i);
       copy[i] = { ...item, cantidad: Math.max(0, item.cantidad - paso) };
       return copy[i].cantidad <= 0 ? copy.filter((_, j) => j !== i) : copy;
@@ -288,7 +258,7 @@ export default function POSPage() {
         <body>
           <div class="header">
             <h2>Punto de Venta</h2>
-            <p><strong>Juan Mejía</strong></p>
+            <p><strong>Tenis y zapatos</strong></p>
             <p>${new Date().toLocaleString('es-MX')}</p>
             ${clienteSeleccionado ? `<div class="cliente"><strong>Cliente:</strong> ${clienteSeleccionado.nombre}</div>` : ''}
           </div>
@@ -301,7 +271,7 @@ export default function POSPage() {
             <div class="item">
               <div class="item-name">${i.producto.nombre}</div>
               <div class="item-detail">
-                ${i.producto.esGranel ? i.cantidad.toFixed(2) + ' kg' : 'Cantidad: ' + i.cantidad} × $${formatearMoneda(i.precioVenta)} = $${formatearMoneda(i.precioVenta * i.cantidad)}
+                Cantidad: ${i.cantidad} × $${formatearMoneda(i.precioVenta)} = $${formatearMoneda(i.precioVenta * i.cantidad)}
               </div>
             </div>
           `).join('')}
@@ -351,70 +321,18 @@ export default function POSPage() {
 
   return (
     <div className="flex flex-col h-full text-white">
-      {/* Modal peso producto a granel */}
-      {productoGranelModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => { setProductoGranelModal(null); setGranelKg('1'); }}>
-          <div className="bg-slate-800 rounded-xl border border-slate-600 shadow-xl w-full max-w-sm p-5" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-semibold text-white mb-1">Venta por peso</h3>
-            <p className="text-sm text-slate-400 mb-4">{productoGranelModal.nombre}</p>
-            <p className="text-sm text-slate-300 mb-2">Precio: ${formatearMoneda(typeof productoGranelModal.precio === 'number' ? productoGranelModal.precio : Number(productoGranelModal.precio) || 0)}/kg · Stock: {productoGranelModal.stock} kg</p>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Peso (kg)</label>
-            <input
-              type="number"
-              min="0.01"
-              max={productoGranelModal.stock}
-              step="0.01"
-              value={granelKg}
-              onChange={(e) => setGranelKg(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg bg-slate-700 border border-slate-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const kg = parseFloat(granelKg) || 0;
-                  if (kg > 0 && kg <= productoGranelModal.stock) {
-                    agregarAlCarrito(productoGranelModal, productoGranelModal.precio, kg);
-                  }
-                }
-              }}
-            />
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => { setProductoGranelModal(null); setGranelKg('1'); }}
-                className="flex-1 py-2.5 rounded-lg bg-slate-600 hover:bg-slate-500 text-white font-medium"
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const kg = parseFloat(granelKg) || 0;
-                  if (kg > 0 && kg <= productoGranelModal.stock) {
-                    agregarAlCarrito(productoGranelModal, productoGranelModal.precio, kg);
-                  } else {
-                    alert(kg <= 0 ? 'Ingresa un peso válido.' : `Stock disponible: ${productoGranelModal.stock} kg`);
-                  }
-                }}
-                className="flex-1 py-2.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold"
-              >
-                Agregar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Header con estadísticas */}
       <div className="px-4 sm:px-6 py-4 border-b border-slate-700 bg-slate-800/50">
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0">
             <h1 className="text-lg sm:text-xl font-bold text-white truncate">Nueva Venta</h1>
-            <p className="text-xs sm:text-sm text-slate-400">Sistema de punto de venta</p>
+            <p className="text-xs sm:text-sm text-slate-400">Calzado · venta por unidad</p>
           </div>
           {carrito.length > 0 && (
             <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm flex-shrink-0">
               <div className="text-right">
                 <p className="text-slate-400">Items</p>
-                <p className="font-bold text-white tabular-nums">{estadisticasVenta.totalItems.toLocaleString('en-US', { maximumFractionDigits: 2 })}</p>
+                <p className="font-bold text-white tabular-nums">{estadisticasVenta.totalItems}</p>
               </div>
               <div className="text-right">
                 <p className="text-slate-400">Total</p>
@@ -469,13 +387,13 @@ export default function POSPage() {
               <svg className="w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <h2 className="text-base sm:text-xl font-semibold text-white">Buscar Productos</h2>
+              <h2 className="text-base sm:text-xl font-semibold text-white">Buscar calzado</h2>
             </div>
             <input
               type="text"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              placeholder="Buscar por nombre o código..."
+              placeholder="Modelo, marca o código de barras…"
               className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-base"
             />
 
@@ -489,18 +407,18 @@ export default function POSPage() {
                     <div className="text-xs text-green-400">Categoría: {productoEncontrado.categoria}</div>
                   </div>
                     <div className="text-right">
-                    <div className="text-2xl font-bold text-white mb-1">${productoEncontrado.precio.toLocaleString('es-MX', { minimumFractionDigits: 2 })}{productoEncontrado.esGranel ? '/kg' : ''}</div>
+                    <div className="text-2xl font-bold text-white mb-1">${productoEncontrado.precio.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</div>
                     <div className={`text-sm font-medium ${productoEncontrado.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      Stock: {productoEncontrado.esGranel ? `${productoEncontrado.stock} kg` : productoEncontrado.stock}
+                      Stock: {productoEncontrado.stock}
                     </div>
                   </div>
                 </div>
                 <button
                   onClick={() => agregarAlCarrito(productoEncontrado)}
-                  disabled={productoEncontrado.stock <= 0 || (typeof productoEncontrado.stock === 'number' && productoEncontrado.stock < (productoEncontrado.esGranel ? 0.01 : 1))}
+                  disabled={productoEncontrado.stock <= 0}
                   className="w-full py-3 rounded-lg bg-green-500 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition touch-manipulation min-h-[44px]"
                 >
-                  {productoEncontrado.esGranel ? 'Vender por peso (kg)' : 'Agregar al carrito'}
+                  Agregar al carrito
                 </button>
               </div>
             )}
@@ -542,7 +460,7 @@ export default function POSPage() {
           {!busqueda && (
             <div>
               <h3 className="text-xs sm:text-sm font-semibold text-slate-300 mb-3 sm:mb-3">
-                Productos Disponibles ({productosDisponibles.length})
+                Artículos en mostrador ({productosDisponibles.length})
               </h3>
               {loading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-3">
@@ -556,14 +474,14 @@ export default function POSPage() {
                     <button
                       key={p.id}
                       onClick={() => agregarAlCarrito(p)}
-                      disabled={p.stock <= 0 || (p.esGranel && p.stock < 0.01)}
+                      disabled={p.stock <= 0}
                       className="text-left p-3 bg-slate-800 rounded-lg border border-slate-700 hover:border-green-500/50 hover:bg-slate-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition touch-manipulation min-h-[72px] sm:min-h-0 active:scale-[0.98]"
                     >
                       <div className="text-xs font-medium text-green-400 mb-1 truncate">{p.categoria}</div>
                       <div className="font-medium text-white text-sm mb-1 truncate">{p.nombre}</div>
                       <div className="flex items-center justify-between mt-2">
-                        <span className="text-sm font-semibold text-white">${formatearMoneda(typeof p.precio === 'number' ? p.precio : Number(p.precio) || 0)}{p.esGranel ? '/kg' : ''}</span>
-                        <span className="text-xs text-slate-400">Stock: {p.esGranel ? `${p.stock} kg` : p.stock}</span>
+                        <span className="text-sm font-semibold text-white">${formatearMoneda(typeof p.precio === 'number' ? p.precio : Number(p.precio) || 0)}</span>
+                        <span className="text-xs text-slate-400">Stock: {p.stock}</span>
                       </div>
                     </button>
                   ))}
@@ -657,7 +575,7 @@ export default function POSPage() {
                         </button>
                       </div>
                       <div className="flex items-center gap-2 mb-2">
-                        <label className="text-xs text-slate-400">{item.producto.esGranel ? 'Precio/kg:' : 'Precio:'}</label>
+                        <label className="text-xs text-slate-400">Precio:</label>
                         <input
                           type="number"
                           value={item.precioVenta}
@@ -675,27 +593,14 @@ export default function POSPage() {
                           >
                             −
                           </button>
-                          {item.producto.esGranel ? (
-                            <input
-                              type="number"
-                              value={item.cantidad}
-                              onChange={(e) => cambiarCantidad(item.producto.id, parseFloat(e.target.value) || 0)}
-                              min="0.01"
-                              max={item.producto.stock}
-                              step="0.01"
-                              className="w-16 px-2 py-1 rounded bg-slate-600 border border-slate-500 text-white text-sm text-center focus:outline-none focus:ring-1 focus:ring-green-500"
-                            />
-                          ) : (
-                            <span className="w-8 text-center font-semibold text-white">{item.cantidad}</span>
-                          )}
+                          <span className="w-8 text-center font-semibold text-white">{item.cantidad}</span>
                           <button
-                            onClick={() => item.producto.esGranel ? cambiarCantidad(item.producto.id, item.cantidad + 0.1) : agregarAlCarrito(item.producto, item.precioVenta)}
-                            disabled={item.producto.esGranel ? item.cantidad >= item.producto.stock : item.cantidad >= item.producto.stock}
+                            onClick={() => agregarAlCarrito(item.producto, item.precioVenta)}
+                            disabled={item.cantidad >= item.producto.stock}
                             className="w-8 h-8 rounded-lg bg-slate-600 hover:bg-slate-500 disabled:opacity-50 flex items-center justify-center text-white text-sm"
                           >
                             +
                           </button>
-                          {item.producto.esGranel && <span className="text-xs text-slate-400">kg</span>}
                         </div>
                         <span className="ml-auto font-bold text-white text-lg">
                           ${formatearMoneda(item.precioVenta * item.cantidad)}
@@ -710,7 +615,7 @@ export default function POSPage() {
                   <div className="space-y-2 pb-3 border-b border-slate-700">
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-400">Items:</span>
-                      <span className="text-white font-medium">{estadisticasVenta.totalItems.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
+                      <span className="text-white font-medium">{estadisticasVenta.totalItems}</span>
                     </div>
                     <div className="flex justify-between text-lg font-bold">
                       <span className="text-slate-300">Total:</span>

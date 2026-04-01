@@ -1,4 +1,4 @@
-// File: D:\Descargas Unidad D\Punto de Venta Juan Mejia\frontend\src\app\pos\productos\page.tsx
+// File: D:\Proyectos Web\POS zapatos\Punto-de-venta-Juan-Mejia-Front\src\app\pos\productos\page.tsx
 import * as entry from '../../../../../src/app/pos/productos/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

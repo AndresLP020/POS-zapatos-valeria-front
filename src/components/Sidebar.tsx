@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { clearPosSession } from '@/lib/auth-session';
 import { usePathname } from 'next/navigation';
 import { useAdminMode } from '@/contexts/AdminModeContext';
 import { useEffect, useState } from 'react';
@@ -61,8 +62,8 @@ export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: (
             </svg>
           </div>
           <div>
-            <span className="font-semibold text-white block leading-tight">POS Juan Mejía</span>
-            <span className="text-xs text-slate-500 font-medium">Sistema de ventas</span>
+            <span className="font-semibold text-white block leading-tight">POS Calzado</span>
+            <span className="text-xs text-slate-500 font-medium">Tenis y zapatos</span>
           </div>
         </Link>
       </div>
@@ -113,7 +114,10 @@ export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: (
       <div className="p-3 border-t border-slate-800/80">
         <Link
           href="/"
-          onClick={onClose}
+          onClick={() => {
+            clearPosSession();
+            onClose?.();
+          }}
           className="flex items-center gap-3 px-3 py-3 md:py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800/80 hover:text-white transition min-h-[44px] md:min-h-0 touch-manipulation"
         >
           <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -129,7 +133,7 @@ export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: (
     <>
       {/* Desktop: sidebar siempre visible en flujo */}
       <aside
-        className="w-60 flex-shrink-0 bg-slate-900 border-r border-slate-800/80 shadow-xl hidden md:flex md:flex-col"
+        className="w-60 flex-shrink-0 bg-blue-950/90 border-r border-blue-900/60 shadow-xl hidden md:flex md:flex-col backdrop-blur-sm"
       >
         {asideContent}
       </aside>
@@ -148,7 +152,7 @@ export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: (
           <aside
             className={`
               fixed inset-y-0 left-0 z-[101] w-[min(280px,85vw)] max-w-[280px] flex flex-col shadow-2xl
-              bg-slate-900 border-r border-slate-800/80
+              bg-blue-950/95 border-r border-blue-900/60
               transform transition-transform duration-200 ease-out
               md:hidden
               ${open ? 'translate-x-0' : '-translate-x-full pointer-events-none'}

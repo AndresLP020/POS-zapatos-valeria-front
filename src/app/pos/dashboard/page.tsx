@@ -131,7 +131,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col min-h-full text-white">
       {/* Header */}
-      <header className="sticky top-0 z-10 flex items-center justify-between gap-2 border-b border-slate-700/80 bg-slate-900/90 backdrop-blur-sm px-3 sm:px-6 py-3 sm:py-4">
+      <header className="sticky top-0 z-10 flex items-center justify-between gap-2 border-b border-blue-800/50 bg-blue-950/75 backdrop-blur-md px-3 sm:px-6 py-3 sm:py-4">
         <div className="min-w-0">
           <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">Dashboard</h1>
           <p className="text-slate-400 text-xs sm:text-sm mt-0.5 capitalize truncate">{hoy()}</p>
@@ -182,7 +182,7 @@ export default function DashboardPage() {
           <>
             {/* Métricas */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mb-6 sm:mb-8">
-              <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 p-5 sm:p-6 shadow-elevated hover:border-slate-600/80 transition">
+              <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 p-5 sm:p-6 shadow-elevated hover:border-blue-700/55 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-400 text-sm font-medium">Productos Activos</p>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </div>
-              <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 p-5 sm:p-6 shadow-elevated hover:border-slate-600/80 transition">
+              <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 p-5 sm:p-6 shadow-elevated hover:border-blue-700/55 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-400 text-sm font-medium">Transacciones Hoy</p>
@@ -208,7 +208,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </div>
-              <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 p-5 sm:p-6 shadow-elevated hover:border-slate-600/80 transition">
+              <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 p-5 sm:p-6 shadow-elevated hover:border-blue-700/55 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-400 text-sm font-medium">Stock Bajo</p>
@@ -225,8 +225,8 @@ export default function DashboardPage() {
 
             {/* Paneles */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-              <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
-                <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-slate-700/80">
+              <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
+                <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-blue-800/45">
                   <h2 className="text-base font-semibold text-white">Ventas Recientes</h2>
                   <Link href="/pos/ventas" className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition touch-manipulation py-1">
                     Ver todas →
@@ -243,7 +243,7 @@ export default function DashboardPage() {
                   ) : (
                     <ul className="space-y-3">
                       {ventasRecientes.map((v) => (
-                        <li key={v.id} className="flex justify-between items-center py-2 border-b border-slate-700/50 last:border-0">
+                        <li key={v.id} className="flex justify-between items-center py-2 border-b border-blue-900/40 last:border-0">
                           <span className="text-slate-400 text-sm">#{v.id} · {formatearFecha(v.fecha)}</span>
                           <span className="text-white font-semibold tabular-nums">${formatearMoneda(v.total ?? 0)}</span>
                         </li>
@@ -253,8 +253,8 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
-                <div className="px-4 sm:px-6 py-4 border-b border-slate-700/80">
+              <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
+                <div className="px-4 sm:px-6 py-4 border-b border-blue-800/45">
                   <h2 className="text-base font-semibold text-white">Productos Más Vendidos</h2>
                   <p className="text-slate-400 text-sm mt-0.5">Por cantidad vendida</p>
                 </div>
@@ -269,7 +269,7 @@ export default function DashboardPage() {
                   ) : (
                     <ul className="space-y-4">
                       {productosMasVendidos.slice(0, 5).map((pv, index) => (
-                        <li key={pv.id} className="flex items-center gap-4 py-2 border-b border-slate-700/50 last:border-0">
+                        <li key={pv.id} className="flex items-center gap-4 py-2 border-b border-blue-900/40 last:border-0">
                           <span className="flex-shrink-0 w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
                             {index + 1}
                           </span>

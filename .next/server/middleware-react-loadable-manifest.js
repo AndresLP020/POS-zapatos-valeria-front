@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"app\\\\pos\\\\layout.tsx -> @/components/FloatingLines\":{\"id\":\"app\\\\pos\\\\layout.tsx -> @/components/FloatingLines\",\"files\":[\"static/chunks/_app-pages-browser_src_components_FloatingLines_tsx.js\"]}}"

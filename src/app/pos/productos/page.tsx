@@ -14,7 +14,6 @@ const formInitial = {
   stock: '',
   stockMinimo: '',
   estado: 'Activo',
-  esGranel: false,
   proveedorId: '' as string | number,
 };
 
@@ -79,7 +78,6 @@ export default function ProductosPage() {
       stock: String(p.stock),
       stockMinimo: p.stockMinimo != null ? String(p.stockMinimo) : '',
       estado: p.estado || 'Activo',
-      esGranel: Boolean(p.esGranel),
       proveedorId: p.proveedorId ?? '',
     });
     setError('');
@@ -107,8 +105,8 @@ export default function ProductosPage() {
       return;
     }
     const costoNum = form.costo ? parseFloat(form.costo) : undefined;
-    const stockNum = form.stock ? (form.esGranel ? parseFloat(form.stock) : parseInt(form.stock, 10)) : 0;
-    const stockMinNum = form.stockMinimo ? (form.esGranel ? parseFloat(form.stockMinimo) : parseInt(form.stockMinimo, 10)) : undefined;
+    const stockNum = form.stock ? parseInt(form.stock, 10) : 0;
+    const stockMinNum = form.stockMinimo ? parseInt(form.stockMinimo, 10) : undefined;
     const proveedorIdNum = form.proveedorId === '' || form.proveedorId == null ? undefined : Number(form.proveedorId);
     const payload = {
       nombre,
@@ -116,10 +114,9 @@ export default function ProductosPage() {
       categoria,
       precio: redondearPrecio(precio),
       costo: costoNum != null ? redondearPrecio(costoNum) : undefined,
-      stock: form.esGranel ? redondearPrecio(stockNum) : Math.max(0, Math.floor(stockNum)),
-      stockMinimo: stockMinNum != null ? (form.esGranel ? redondearPrecio(stockMinNum) : Math.max(0, Math.floor(stockMinNum))) : undefined,
+      stock: Math.max(0, Math.floor(stockNum)),
+      stockMinimo: stockMinNum != null ? Math.max(0, Math.floor(stockMinNum)) : undefined,
       estado: form.estado,
-      esGranel: Boolean(form.esGranel),
       proveedorId: proveedorIdNum,
     };
     setGuardando(true);
@@ -458,9 +455,6 @@ export default function ProductosPage() {
                         <td className="py-4 px-6">
                           <div className="font-medium text-white">{p.nombre}</div>
                           {p.codigo && <div className="text-xs text-slate-400 mt-0.5">Código: {p.codigo}</div>}
-                          {p.esGranel && (
-                            <span className="inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">A granel</span>
-                          )}
                         </td>
                         <td className="py-4 px-6">
                           <span className="text-slate-300 font-mono text-sm">{p.codigo || '-'}</span>
@@ -474,18 +468,18 @@ export default function ProductosPage() {
                           {proveedores.find((pr) => pr.id === p.proveedorId)?.nombre ?? '-'}
                         </td>
                         <td className="py-4 px-6 text-right">
-                          <div className="text-white font-semibold">${formatearMoneda(redondearPrecio(p.precio))}{p.esGranel && <span className="text-slate-400 font-normal text-xs">/kg</span>}</div>
+                          <div className="text-white font-semibold">${formatearMoneda(redondearPrecio(p.precio))}</div>
                           {margenGanancia > 0 && (
                             <div className="text-xs text-green-400 mt-0.5">{formatearCantidad(margenGanancia, 1)}% ganancia</div>
                           )}
                         </td>
                         <td className="py-4 px-6 text-right text-slate-400">
-                          ${formatearMoneda(redondearPrecio(p.costo || 0))}{p.esGranel && <span className="text-xs">/kg</span>}
+                          ${formatearMoneda(redondearPrecio(p.costo || 0))}
                         </td>
                         <td className="py-4 px-6 text-right">
                           <div className={`inline-flex items-center gap-2 px-2 py-1 rounded ${estadoStock.bg} ${estadoStock.border} border`}>
-                            <span className={`font-semibold ${estadoStock.color}`}>{p.esGranel ? formatearCantidad(p.stock, 2) : formatearCantidad(p.stock)}</span>
-                            <span className="text-xs text-slate-400">/ {p.esGranel ? formatearCantidad(p.stockMinimo ?? 0, 2) : formatearCantidad(p.stockMinimo ?? 0)}{p.esGranel ? ' kg' : ''}</span>
+                            <span className={`font-semibold ${estadoStock.color}`}>{formatearCantidad(p.stock)}</span>
+                            <span className="text-xs text-slate-400">/ {formatearCantidad(p.stockMinimo ?? 0)}</span>
                           </div>
                           <div className={`text-xs mt-1 ${estadoStock.color}`}>{estadoStock.texto}</div>
                         </td>
@@ -540,12 +534,9 @@ export default function ProductosPage() {
                     <div className="flex-1">
                       <h3 className="font-bold text-white mb-1">{p.nombre}</h3>
                       <p className="text-xs text-slate-400 font-mono">{p.codigo || 'Sin código'}</p>
-                      {p.esGranel && (
-                        <span className="inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">A granel</span>
-                      )}
                     </div>
                     <span className={`px-2 py-1 rounded text-xs font-medium ${estadoStock.bg} ${estadoStock.border} border ${estadoStock.color}`}>
-                      {p.esGranel ? `${formatearCantidad(typeof p.stock === 'number' ? p.stock : 0, 2)} kg` : formatearCantidad(p.stock)}
+                      {formatearCantidad(p.stock)}
                     </span>
                   </div>
                   
@@ -559,13 +550,13 @@ export default function ProductosPage() {
                       <span className="text-slate-300">{proveedores.find((pr) => pr.id === p.proveedorId)?.nombre ?? '-'}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-400">{p.esGranel ? 'Precio/kg:' : 'Precio:'}</span>
-                      <span className="text-white font-bold">${formatearMoneda(redondearPrecio(p.precio))}{p.esGranel ? '/kg' : ''}</span>
+                      <span className="text-slate-400">Precio:</span>
+                      <span className="text-white font-bold">${formatearMoneda(redondearPrecio(p.precio))}</span>
                     </div>
                     {p.costo != null && p.costo > 0 && (
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-400">{p.esGranel ? 'Costo/kg:' : 'Costo:'}</span>
-                        <span className="text-slate-300">${formatearMoneda(redondearPrecio(p.costo || 0))}{p.esGranel ? '/kg' : ''}</span>
+                        <span className="text-slate-400">Costo:</span>
+                        <span className="text-slate-300">${formatearMoneda(redondearPrecio(p.costo || 0))}</span>
                       </div>
                     )}
                     {margenGanancia > 0 && (
@@ -576,7 +567,7 @@ export default function ProductosPage() {
                     )}
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-slate-400">Stock Mínimo:</span>
-                      <span className="text-slate-300">{p.esGranel ? formatearCantidad(p.stockMinimo ?? 0, 2) : formatearCantidad(p.stockMinimo ?? 0)}{p.esGranel ? ' kg' : ''}</span>
+                      <span className="text-slate-300">{formatearCantidad(p.stockMinimo ?? 0)}</span>
                     </div>
                   </div>
 
@@ -633,7 +624,7 @@ export default function ProductosPage() {
                   type="text"
                   value={form.nombre}
                   onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
-                  placeholder="Ej. Café Americano"
+                  placeholder="Ej. Tenis Nike Air Max talla 28"
                   className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   required
                 />
@@ -709,22 +700,10 @@ export default function ProductosPage() {
                 </select>
                 <p className="text-slate-500 text-xs mt-1">Quien surte este producto. Gestiona proveedores en el menú Proveedores.</p>
               </div>
-              <div>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={form.esGranel}
-                    onChange={(e) => setForm((f) => ({ ...f, esGranel: e.target.checked }))}
-                    className="rounded border-slate-500 text-emerald-500 focus:ring-emerald-500"
-                  />
-                  <span className="text-slate-300 text-sm font-medium">Venta a granel (por peso)</span>
-                </label>
-                <p className="text-slate-500 text-xs mt-1">Para productos que se venden por kg (pollo, carnes, frutas, etc.)</p>
-              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-400 text-sm font-medium mb-1">
-                    {form.esGranel ? 'Precio compra (por kg) *' : 'Precio compra *'}
+                    Precio compra *
                   </label>
                   <input
                     type="number"
@@ -738,7 +717,7 @@ export default function ProductosPage() {
                 </div>
                 <div>
                   <label className="block text-slate-400 text-sm font-medium mb-1">
-                    {form.esGranel ? 'Precio venta (por kg) *' : 'Precio venta *'}
+                    Precio venta *
                   </label>
                   <input
                     type="number"
@@ -755,29 +734,29 @@ export default function ProductosPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-400 text-sm font-medium mb-1">
-                    {form.esGranel ? 'Stock (kg)' : 'Stock'}
+                    Stock
                   </label>
                   <input
                     type="number"
-                    step={form.esGranel ? '0.01' : '1'}
+                    step="1"
                     min="0"
                     value={form.stock}
                     onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
-                    placeholder={form.esGranel ? '0.00' : '0'}
+                    placeholder="0"
                     className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-slate-400 text-sm font-medium mb-1">
-                    {form.esGranel ? 'Stock mínimo (kg)' : 'Stock mínimo'}
+                    Stock mínimo
                   </label>
                   <input
                     type="number"
-                    step={form.esGranel ? '0.01' : '1'}
+                    step="1"
                     min="0"
                     value={form.stockMinimo}
                     onChange={(e) => setForm((f) => ({ ...f, stockMinimo: e.target.value }))}
-                    placeholder={form.esGranel ? '0.00' : '0'}
+                    placeholder="0"
                     className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   />
                 </div>

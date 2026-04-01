@@ -276,7 +276,7 @@ export async function deleteMovimientoLienzo(id: number): Promise<void> {
   if (!res.ok) throw new Error('Error al eliminar movimiento');
 }
 
-export async function postProducto(body: { nombre: string; codigo?: string; categoria: string; precio: number; costo?: number; stock?: number; stockMinimo?: number; estado?: string; esGranel?: boolean; proveedorId?: number }) {
+export async function postProducto(body: { nombre: string; codigo?: string; categoria: string; precio: number; costo?: number; stock?: number; stockMinimo?: number; estado?: string; proveedorId?: number }) {
   const res = await fetch(`${BASE}/api/productos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -286,7 +286,7 @@ export async function postProducto(body: { nombre: string; codigo?: string; cate
   return res.json();
 }
 
-export async function putProducto(id: number, body: { nombre?: string; codigo?: string; categoria?: string; precio?: number; costo?: number; stock?: number; stockMinimo?: number; estado?: string; esGranel?: boolean; proveedorId?: number | null }) {
+export async function putProducto(id: number, body: { nombre?: string; codigo?: string; categoria?: string; precio?: number; costo?: number; stock?: number; stockMinimo?: number; estado?: string; proveedorId?: number | null }) {
   const res = await fetch(`${BASE}/api/productos/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -313,8 +313,6 @@ export type Producto = {
   stock: number;
   stockMinimo?: number;
   estado?: string;
-  /** Si true, el producto se vende por peso (kg). Precio = precio por kg, stock = stock en kg */
-  esGranel?: boolean;
   proveedorId?: number;
 };
 

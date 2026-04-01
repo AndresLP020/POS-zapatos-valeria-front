@@ -22,6 +22,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Shell POS: evita el gris claro de bg-surface detrás del WebGL */
+body[data-pos-shell='1'] {
+  background-color: #030712 !important;
+}
+
 *:focus-visible {
   outline: 2px solid rgb(34 197 94);
   outline-offset: 2px;

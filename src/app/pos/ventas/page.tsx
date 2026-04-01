@@ -44,7 +44,7 @@ function VentasPageContent() {
   const [ordenarPor, setOrdenarPor] = useState<'fecha' | 'total'>('fecha');
   const [ordenAscendente, setOrdenAscendente] = useState(false);
   const [vista, setVista] = useState<VistaVentas>('ventas');
-  const [productos, setProductos] = useState<{ id: number; nombre: string; precio: number; stock: number; esGranel?: boolean }[]>([]);
+  const [productos, setProductos] = useState<{ id: number; nombre: string; precio: number; stock: number }[]>([]);
   const [modalDevolucion, setModalDevolucion] = useState<{ ventaId: number | null; items: ItemDevolucionEdit[] } | null>(null);
   const [enviandoDevolucion, setEnviandoDevolucion] = useState(false);
   const [modalEditarVenta, setModalEditarVenta] = useState<{ venta: Venta; items: VentaItemEdit[] } | null>(null);
@@ -375,7 +375,7 @@ function VentasPageContent() {
         <body>
           <div class="header">
             <h2>Punto de Venta</h2>
-            <p><strong>Juan Mejía</strong></p>
+            <p><strong>Tenis y zapatos</strong></p>
             <p><strong>Ticket corregido #${venta.id}</strong></p>
             <p class="sub">${new Date().toLocaleString('es-MX')}</p>
             ${venta.cliente ? `<div class="cliente"><strong>Cliente:</strong> ${venta.cliente}</div>` : ''}
