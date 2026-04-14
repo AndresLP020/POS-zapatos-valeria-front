@@ -178,7 +178,7 @@ export default function POSPage() {
     return isNaN(n) ? 0 : n;
   };
   const montoPagadoNum = parseMontoPagado();
-  const pagado = montoPagado.trim() === '' ? totalCarrito : montoPagadoNum;
+  const pagado = montoPagadoNum;
   const pendiente = Math.max(0, totalCarrito - pagado);
   const cambio = pagado > totalCarrito ? pagado - totalCarrito : 0;
 
@@ -194,14 +194,14 @@ export default function POSPage() {
 
   const cobrar = async () => {
     if (carrito.length === 0) return;
-    const montoPago = montoPagado.trim() === '' ? totalCarrito : montoPagadoNum;
+    const montoPago = montoPagadoNum;
     const pendienteVenta = Math.max(0, totalCarrito - montoPago);
     if (montoPago < 0 || montoPago > totalCarrito * 2) {
       alert('El monto pagado debe ser válido');
       return;
     }
     if (pendienteVenta > 0 && !clienteSeleccionado) {
-      alert('Para una venta a crédito debes seleccionar un cliente');
+      alert('Para una venta a crédito debes seleccionar un cliente registrado. No se permite Cliente general.');
       return;
     }
     setEnviando(true);
@@ -236,7 +236,7 @@ export default function POSPage() {
   const imprimirTicket = () => {
     const ventana = window.open('', '_blank');
     if (!ventana) return;
-    const montoPago = montoPagado.trim() === '' ? totalCarrito : montoPagadoNum;
+    const montoPago = montoPagadoNum;
     const pendienteTicket = Math.max(0, totalCarrito - montoPago);
     const cambioTicket = montoPago > totalCarrito ? montoPago - totalCarrito : 0;
 
