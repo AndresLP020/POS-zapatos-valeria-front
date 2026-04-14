@@ -2,7 +2,17 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { getVentas, getProductos, getGastosAdmin, getNominas, type Producto } from '@/lib/api';
+import {
+  getVentas,
+  getProductos,
+  getGastosAdmin,
+  getNominas,
+  getMovimientosInventario,
+  getAuditoria,
+  type Producto,
+  type MovimientoInventario,
+  type LogAuditoria,
+} from '@/lib/api';
 import { formatearMoneda } from '@/lib/utils';
 
 type Venta = {
@@ -10,6 +20,8 @@ type Venta = {
   fecha: string;
   total: number;
   pagado?: number;
+  vendedorNombre?: string;
+  vendedorId?: number;
   items: { id: number; nombre: string; precio: number; cantidad: number; costo?: number }[];
 };
 
@@ -31,6 +43,8 @@ export default function ReportesPage() {
   const [gastosAdmin, setGastosAdmin] = useState<{ fecha: string; monto: number }[]>([]);
   const [nominas, setNominas] = useState<{ fecha: string; total: number }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [movimientosInventario, setMovimientosInventario] = useState<MovimientoInventario[]>([]);
+  const [auditoria, setAuditoria] = useState<LogAuditoria[]>([]);
   const [filtroPeriodo, setFiltroPeriodo] = useState<FiltroPeriodo>('año');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
@@ -39,21 +53,27 @@ export default function ReportesPage() {
   const cargarDatos = useCallback(async () => {
     setLoading(true);
     try {
-      const [v, p, g, n] = await Promise.all([
+      const [v, p, g, n, movs, aud] = await Promise.all([
         getVentas(),
         getProductos(),
         getGastosAdmin(),
         getNominas(),
+        getMovimientosInventario(500),
+        getAuditoria(500),
       ]);
       setVentas(v);
       setProductos(p);
       setGastosAdmin(g);
       setNominas(n);
+      setMovimientosInventario(movs);
+      setAuditoria(aud);
     } catch {
       setVentas([]);
       setProductos([]);
       setGastosAdmin([]);
       setNominas([]);
+      setMovimientosInventario([]);
+      setAuditoria([]);
     } finally {
       setLoading(false);
     }
@@ -181,6 +201,67 @@ export default function ReportesPage() {
   const ventasRecientesPeriodo = [...ventasFiltradas]
     .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
     .slice(0, 10);
+  const movimientosPeriodo = movimientosInventario.filter((m) => {
+    const d = new Date(m.fecha);
+    return d >= inicioPeriodo && d <= finPeriodo;
+  });
+  const auditoriaPeriodo = auditoria.filter((a) => {
+    const d = new Date(a.fecha);
+    return d >= inicioPeriodo && d <= finPeriodo;
+  });
+
+  const rankingVendedores = (() => {
+    const map = new Map<string, { nombre: string; ventas: number; ingresos: number; unidades: number }>();
+    ventasConPago.forEach((v) => {
+      const key = (v.vendedorNombre || 'Sin asignar').trim() || 'Sin asignar';
+      const prev = map.get(key) || { nombre: key, ventas: 0, ingresos: 0, unidades: 0 };
+      prev.ventas += 1;
+      prev.ingresos += v.pagado || v.total || 0;
+      prev.unidades += (v.items || []).reduce((s, it) => s + it.cantidad, 0);
+      map.set(key, prev);
+    });
+    return Array.from(map.values()).sort((a, b) => b.ingresos - a.ingresos);
+  })();
+
+  const actividadPorTrabajador = (() => {
+    const map = new Map<string, { nombre: string; eventos: number; ventas: number; transferencias: number; usuarios: number }>();
+    const add = (nombre: string, campo: 'ventas' | 'transferencias' | 'usuarios') => {
+      const key = (nombre || 'Sin asignar').trim() || 'Sin asignar';
+      const prev = map.get(key) || { nombre: key, eventos: 0, ventas: 0, transferencias: 0, usuarios: 0 };
+      prev.eventos += 1;
+      prev[campo] += 1;
+      map.set(key, prev);
+    };
+    ventasConPago.forEach((v) => add(v.vendedorNombre || 'Sin asignar', 'ventas'));
+    movimientosPeriodo.forEach((m) => {
+      add(m.solicitadoPor || 'Sin asignar', 'transferencias');
+      add(m.autorizadoPor || 'Sin asignar', 'transferencias');
+      add(m.recogidoPor || 'Sin asignar', 'transferencias');
+    });
+    auditoriaPeriodo
+      .filter((a) => a.tipo === 'usuario_alta')
+      .forEach((a) => add(a.usuarioNombre || 'Sin asignar', 'usuarios'));
+    return Array.from(map.values()).sort((a, b) => b.eventos - a.eventos);
+  })();
+
+  const flujoBodega = (() => {
+    const count = (field: 'solicitadoPor' | 'autorizadoPor' | 'recogidoPor') => {
+      const map = new Map<string, number>();
+      movimientosPeriodo.forEach((m) => {
+        const n = (m[field] || 'Sin asignar').trim() || 'Sin asignar';
+        map.set(n, (map.get(n) || 0) + 1);
+      });
+      return Array.from(map.entries())
+        .map(([nombre, total]) => ({ nombre, total }))
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 8);
+    };
+    return {
+      solicita: count('solicitadoPor'),
+      autoriza: count('autorizadoPor'),
+      recibe: count('recogidoPor'),
+    };
+  })();
 
   const productosMasVendidosPeriodo = (() => {
     const map = new Map<number, { nombre: string; cantidad: number; total: number }>();
@@ -625,6 +706,83 @@ export default function ReportesPage() {
                 <p className="text-sm text-slate-400">Ganancia por venta</p>
               </div>
               <p className="text-2xl font-bold text-white">${formatearMoneda(metricas.gananciaPorVenta)}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Desempeño de trabajadores y flujo de bodega */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
+            <div className="px-5 py-4 border-b border-slate-700/80">
+              <h2 className="text-base font-semibold text-white">Comparativa de trabajadores</h2>
+              <p className="text-slate-400 text-xs mt-0.5">Quién vende más y quién tiene más actividad en el sistema</p>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Top vendedores</p>
+                {rankingVendedores.length === 0 ? (
+                  <p className="text-slate-500 text-sm">Sin ventas en el período.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {rankingVendedores.slice(0, 8).map((r, i) => (
+                      <div key={`${r.nombre}-${i}`} className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-900/40 px-3 py-2">
+                        <div>
+                          <p className="text-sm text-white font-medium">{r.nombre}</p>
+                          <p className="text-xs text-slate-400">{r.ventas} ventas · {r.unidades} unidades</p>
+                        </div>
+                        <p className="text-sm font-semibold text-emerald-400">${formatearMoneda(r.ingresos)}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div>
+                <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Actividad por trabajador</p>
+                {actividadPorTrabajador.length === 0 ? (
+                  <p className="text-slate-500 text-sm">Sin actividad registrada.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {actividadPorTrabajador.slice(0, 10).map((a, i) => (
+                      <div key={`${a.nombre}-${i}`} className="rounded-xl border border-slate-700 bg-slate-900/40 px-3 py-2">
+                        <p className="text-sm text-white font-medium">{a.nombre}</p>
+                        <p className="text-xs text-slate-400">
+                          Eventos: {a.eventos} · Ventas: {a.ventas} · Bodega: {a.transferencias} · Altas usuario: {a.usuarios}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
+            <div className="px-5 py-4 border-b border-slate-700/80">
+              <h2 className="text-base font-semibold text-white">Flujo bodega y tienda</h2>
+              <p className="text-slate-400 text-xs mt-0.5">Quién pide, quién autoriza y quién recibe transferencias</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4">
+              {([
+                { title: 'Quién pide', list: flujoBodega.solicita },
+                { title: 'Quién autoriza', list: flujoBodega.autoriza },
+                { title: 'Quién recibe', list: flujoBodega.recibe },
+              ] as const).map((bloque) => (
+                <div key={bloque.title} className="rounded-xl border border-slate-700 bg-slate-900/40 p-3">
+                  <p className="text-xs uppercase tracking-wide text-slate-400 mb-2">{bloque.title}</p>
+                  {bloque.list.length === 0 ? (
+                    <p className="text-slate-500 text-xs">Sin datos</p>
+                  ) : (
+                    <div className="space-y-1.5">
+                      {bloque.list.map((r, idx) => (
+                        <div key={`${bloque.title}-${r.nombre}-${idx}`} className="flex items-center justify-between text-sm">
+                          <span className="text-slate-200 truncate pr-2">{r.nombre}</span>
+                          <span className="text-emerald-400 font-semibold">{r.total}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>

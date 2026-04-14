@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { clearPosSession } from '@/lib/auth-session';
+import { getPosSessionUser, type PosSessionUser } from '@/lib/auth-session';
 import { usePathname } from 'next/navigation';
 import { useAdminMode } from '@/contexts/AdminModeContext';
 import { useEffect, useState } from 'react';
@@ -10,6 +11,8 @@ import { createPortal } from 'react-dom';
 const items: { href: string; label: string; icon: string; adminOnly?: boolean }[] = [
   { href: '/pos/dashboard', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
   { href: '/pos/productos', label: 'Productos', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' },
+  { href: '/pos/bodega-tienda', label: 'Bodega y tienda', icon: 'M3 7l9-4 9 4M4 10h16v10H4V10zm5 0v10m6-10v10M8 14h1m6 0h1' },
+  { href: '/pos/codigos-productos', label: 'Códigos de productos', icon: 'M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M15 16h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M6 8v8m0-8V6a2 2 0 012-2h8a2 2 0 012 2v2M6 8h12', adminOnly: true },
   { href: '/pos/proveedores', label: 'Proveedores', icon: 'M8 7h12m0 0l-4-4m4 4l4-4m0 6H4m0 0l4 4m-4-4l4-4' },
   { href: '/pos', label: 'Ventas', icon: 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z' },
   { href: '/pos/clientes', label: 'Clientes', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
@@ -25,6 +28,8 @@ const items: { href: string; label: string; icon: string; adminOnly?: boolean }[
 const LABEL_BY_PATH: Record<string, string> = {
   '/pos/dashboard': 'Dashboard',
   '/pos/productos': 'Productos',
+  '/pos/bodega-tienda': 'Bodega y tienda',
+  '/pos/codigos-productos': 'Códigos de productos',
   '/pos/proveedores': 'Proveedores',
   '/pos': 'Ventas',
   '/pos/clientes': 'Clientes',
@@ -40,10 +45,13 @@ const LABEL_BY_PATH: Record<string, string> = {
 export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: () => void }) {
   const pathname = usePathname();
   const { isAdminMode } = useAdminMode();
+  const [user, setUser] = useState<PosSessionUser | null>(null);
+  const canSeeBodega = isAdminMode || user?.role === 'bodega' || user?.role === 'admin';
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    setUser(getPosSessionUser());
   }, []);
 
   useEffect(() => {
@@ -67,7 +75,10 @@ export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: (
       </div>
       <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto scrollbar-thin">
         <p className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Menú principal</p>
-        {items.filter((item) => !item.adminOnly || isAdminMode).map(({ href, label, icon }) => {
+        {items.filter((item) => {
+          if (item.href === '/pos/bodega-tienda') return canSeeBodega || !item.adminOnly;
+          return !item.adminOnly || isAdminMode;
+        }).map(({ href, label, icon }) => {
           const isActive =
             pathname === href ||
             (pathname === '/pos' && label === 'Ventas') ||

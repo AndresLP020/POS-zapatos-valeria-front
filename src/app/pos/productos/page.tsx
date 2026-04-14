@@ -1,7 +1,19 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { getProductos, getCategorias, getProveedores, postCategoria, deleteCategoria, postProducto, putProducto, deleteProducto, type Producto, type Proveedor } from '@/lib/api';
+import {
+  getProductos,
+  getCategorias,
+  getProveedores,
+  postCategoria,
+  deleteCategoria,
+  postProducto,
+  putProducto,
+  deleteProducto,
+  getSiguienteCodigoBarras,
+  type Producto,
+  type Proveedor,
+} from '@/lib/api';
 import { formatearMoneda, formatearCantidad } from '@/lib/utils';
 import { useAdminMode } from '@/contexts/AdminModeContext';
 
@@ -39,6 +51,7 @@ export default function ProductosPage() {
   const [error, setError] = useState('');
   const [nuevaCategoria, setNuevaCategoria] = useState('');
   const [creandoCategoria, setCreandoCategoria] = useState(false);
+  const [generandoCodigoBarras, setGenerandoCodigoBarras] = useState(false);
 
   const cargarDatos = useCallback(() => {
     setLoading(true);
@@ -164,6 +177,19 @@ export default function ProductosPage() {
       setError(err instanceof Error ? err.message : 'Error al crear categoría');
     } finally {
       setCreandoCategoria(false);
+    }
+  };
+
+  const generarCodigoBarrasEan = async () => {
+    setGenerandoCodigoBarras(true);
+    setError('');
+    try {
+      const { codigo } = await getSiguienteCodigoBarras(editandoId ?? undefined);
+      setForm((f) => ({ ...f, codigo }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo generar el código');
+    } finally {
+      setGenerandoCodigoBarras(false);
     }
   };
 
@@ -630,14 +656,28 @@ export default function ProductosPage() {
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-sm font-medium mb-1">Código</label>
-                <input
-                  type="text"
-                  value={form.codigo}
-                  onChange={(e) => setForm((f) => ({ ...f, codigo: e.target.value }))}
-                  placeholder="Código de barras (opcional)"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
-                />
+                <label className="block text-slate-400 text-sm font-medium mb-1">Código de barras</label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="text"
+                    value={form.codigo}
+                    onChange={(e) => setForm((f) => ({ ...f, codigo: e.target.value }))}
+                    placeholder="Opcional: manual o generado"
+                    className="flex-1 rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={generarCodigoBarrasEan}
+                    disabled={generandoCodigoBarras}
+                    className="shrink-0 px-4 py-2.5 rounded-xl bg-sky-600/90 hover:bg-sky-500 text-white text-sm font-medium transition disabled:opacity-50 whitespace-nowrap"
+                    title="Genera un EAN-13 único (prefijo interno 200…)"
+                  >
+                    {generandoCodigoBarras ? 'Generando…' : 'Generar EAN-13'}
+                  </button>
+                </div>
+                <p className="text-slate-500 text-xs mt-1">
+                  Si lo dejas vacío al guardar, el sistema asigna un código numérico por defecto. El botón propone un EAN-13 único listo para escanear.
+                </p>
               </div>
               <div>
                 <label className="block text-slate-400 text-sm font-medium mb-1">Categoría</label>

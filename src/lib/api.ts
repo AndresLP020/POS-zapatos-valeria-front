@@ -49,7 +49,15 @@ export async function getVentas() {
   return res.json();
 }
 
-export async function postVenta(body: { items: { id: number; nombre: string; precio: number; cantidad: number; costo?: number }[]; total: number; cliente?: string; clienteId?: number; pagado?: number }) {
+export async function postVenta(body: {
+  items: { id: number; nombre: string; precio: number; cantidad: number; costo?: number }[];
+  total: number;
+  cliente?: string;
+  clienteId?: number;
+  pagado?: number;
+  vendedorId?: number;
+  vendedorNombre?: string;
+}) {
   const res = await fetch(`${BASE}/api/ventas`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -239,14 +247,27 @@ export async function postMovimientoProveedor(body: {
 }
 
 
+export async function getSiguienteCodigoBarras(excludeProductId?: number): Promise<{ codigo: string }> {
+  const q = excludeProductId != null ? `?excludeProductId=${excludeProductId}` : '';
+  const res = await fetch(`${BASE}/api/productos/siguiente-codigo-barras${q}`);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error((data as { error?: string }).error || 'Error al generar código de barras');
+  }
+  return data as { codigo: string };
+}
+
 export async function postProducto(body: { nombre: string; codigo?: string; categoria: string; precio: number; costo?: number; stock?: number; stockMinimo?: number; estado?: string; proveedorId?: number }) {
   const res = await fetch(`${BASE}/api/productos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  if (!res.ok) throw new Error('Error al crear producto');
-  return res.json();
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error((data as { error?: string }).error || 'Error al crear producto');
+  }
+  return data;
 }
 
 export async function putProducto(id: number, body: { nombre?: string; codigo?: string; categoria?: string; precio?: number; costo?: number; stock?: number; stockMinimo?: number; estado?: string; proveedorId?: number | null }) {
@@ -255,8 +276,11 @@ export async function putProducto(id: number, body: { nombre?: string; codigo?: 
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  if (!res.ok) throw new Error('Error al actualizar producto');
-  return res.json();
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error((data as { error?: string }).error || 'Error al actualizar producto');
+  }
+  return data;
 }
 
 export async function deleteProducto(id: number) {
@@ -274,10 +298,111 @@ export type Producto = {
   precio: number;
   costo?: number;
   stock: number;
+  stockBodega?: number;
   stockMinimo?: number;
   estado?: string;
   proveedorId?: number;
 };
+
+export type InventarioUbicacionItem = {
+  id: number;
+  nombre: string;
+  codigo?: string;
+  categoria?: string;
+  stockTotal: number;
+  stockBodega: number;
+  stockTienda: number;
+};
+
+export type MovimientoInventario = {
+  id: number;
+  fecha: string;
+  productoId: number;
+  productoNombre: string;
+  origen: 'bodega' | 'tienda';
+  destino: 'bodega' | 'tienda';
+  cantidad: number;
+  estado?: 'solicitado' | 'autorizado';
+  solicitadoPorId?: number;
+  solicitadoPor?: string;
+  autorizadoPorId?: number;
+  autorizadoPor?: string;
+  recogidoPorId?: number;
+  recogidoPor?: string;
+};
+
+export async function getInventarioUbicaciones(): Promise<InventarioUbicacionItem[]> {
+  const res = await fetch(`${BASE}/api/inventario-ubicaciones`);
+  if (!res.ok) throw new Error('Error al cargar inventario por ubicación');
+  return res.json();
+}
+
+export async function getMovimientosInventario(limit = 80): Promise<MovimientoInventario[]> {
+  const res = await fetch(`${BASE}/api/inventario-ubicaciones/movimientos?limit=${Math.max(1, Math.floor(limit || 80))}`);
+  if (!res.ok) throw new Error('Error al cargar movimientos de inventario');
+  return res.json();
+}
+
+export async function postTransferirInventario(body: {
+  productoId: number;
+  cantidad: number;
+  origen: 'bodega' | 'tienda';
+  destino: 'bodega' | 'tienda';
+  solicitadoPorId?: number;
+  solicitadoPor: string;
+  autorizadoPorId?: number;
+  autorizadoPor: string;
+  recogidoPorId?: number;
+  recogidoPor: string;
+  actorRole?: string;
+}) {
+  const res = await fetch(`${BASE}/api/inventario-ubicaciones/transferir`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { error?: string }).error || 'Error al transferir inventario');
+  return data;
+}
+
+export async function getSolicitudesInventario(estado: 'solicitado' | 'autorizado' = 'solicitado', limit = 120): Promise<MovimientoInventario[]> {
+  const res = await fetch(`${BASE}/api/inventario-ubicaciones/solicitudes?estado=${estado}&limit=${Math.max(1, Math.floor(limit || 120))}`);
+  if (!res.ok) throw new Error('Error al cargar solicitudes de inventario');
+  return res.json();
+}
+
+export async function postSolicitudInventario(body: {
+  productoId: number;
+  cantidad: number;
+  solicitadoPorId?: number;
+  solicitadoPor: string;
+  recogidoPorId?: number;
+  recogidoPor: string;
+}) {
+  const res = await fetch(`${BASE}/api/inventario-ubicaciones/solicitudes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { error?: string }).error || 'Error al registrar solicitud');
+  return data;
+}
+
+export async function postAutorizarSolicitudInventario(
+  id: number,
+  body: { autorizadoPorId?: number; autorizadoPor: string; actorRole?: string }
+) {
+  const res = await fetch(`${BASE}/api/inventario-ubicaciones/solicitudes/${id}/autorizar`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { error?: string }).error || 'Error al autorizar solicitud');
+  return data;
+}
 
 export type Cliente = {
   id: number;
@@ -523,7 +648,19 @@ export type Usuario = {
   email: string;
   nombre: string;
   telefono?: string;
+  rol?: 'trabajador' | 'bodega';
   permisos: PermisosPOS;
+};
+
+export type LogAuditoria = {
+  id: number;
+  fecha: string;
+  tipo: string;
+  modulo: string;
+  descripcion: string;
+  usuarioId?: number;
+  usuarioNombre?: string;
+  metadata?: Record<string, unknown>;
 };
 
 export async function getUsuarios() {
@@ -537,6 +674,7 @@ export async function postUsuario(body: {
   password: string;
   nombre: string;
   telefono?: string;
+  rol?: 'trabajador' | 'bodega';
   permisos?: PermisosPOS;
 }) {
   const res = await fetch(`${BASE}/api/usuarios`, {
@@ -553,7 +691,7 @@ export async function postUsuario(body: {
 
 export async function putUsuario(
   id: number,
-  body: { email?: string; password?: string; nombre?: string; telefono?: string; permisos?: PermisosPOS }
+  body: { email?: string; password?: string; nombre?: string; telefono?: string; rol?: 'trabajador' | 'bodega'; permisos?: PermisosPOS }
 ) {
   const res = await fetch(`${BASE}/api/usuarios/${id}`, {
     method: 'PUT',
@@ -571,7 +709,7 @@ export async function deleteUsuario(id: number) {
   if (!res.ok) throw new Error('Error al eliminar usuario');
 }
 
-export async function login(usuario: string, password: string): Promise<{ ok: true }> {
+export async function login(usuario: string, password: string): Promise<{ ok: true; user: { id?: number; nombre: string; email?: string; role?: string } }> {
   const res = await fetch(`${BASE}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -594,5 +732,11 @@ export async function verifyAdminPassword(password: string): Promise<{ ok: true 
     const data = await res.json().catch(() => ({}));
     throw new Error((data as { error?: string }).error || 'Contraseña incorrecta');
   }
+  return res.json();
+}
+
+export async function getAuditoria(limit = 200): Promise<LogAuditoria[]> {
+  const res = await fetch(`${BASE}/api/auditoria?limit=${Math.max(1, Math.floor(limit || 200))}`);
+  if (!res.ok) throw new Error('Error al cargar auditoría');
   return res.json();
 }

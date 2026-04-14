@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { getProductos, getProductoPorCodigo, getCategorias, postVenta, getClientes, type Producto, type Cliente } from '@/lib/api';
+import { TICKET_POLITICA_CAMBIO_CSS, TICKET_POLITICA_CAMBIO_HTML } from '@/lib/ticket-politica-cambio';
+import { getPosSessionUser } from '@/lib/auth-session';
 
 type CarritoItem = {
   producto: Producto;
@@ -29,6 +31,7 @@ function formatInputConComas(s: string): string {
 }
 
 export default function POSPage() {
+  const usuarioSesion = getPosSessionUser();
   const [productos, setProductos] = useState<Producto[]>([]);
   const [categorias, setCategorias] = useState<string[]>([]);
   const [clientes, setClientes] = useState<Cliente[]>([]);
@@ -192,8 +195,13 @@ export default function POSPage() {
   const cobrar = async () => {
     if (carrito.length === 0) return;
     const montoPago = montoPagado.trim() === '' ? totalCarrito : montoPagadoNum;
+    const pendienteVenta = Math.max(0, totalCarrito - montoPago);
     if (montoPago < 0 || montoPago > totalCarrito * 2) {
       alert('El monto pagado debe ser válido');
+      return;
+    }
+    if (pendienteVenta > 0 && !clienteSeleccionado) {
+      alert('Para una venta a crédito debes seleccionar un cliente');
       return;
     }
     setEnviando(true);
@@ -210,6 +218,8 @@ export default function POSPage() {
         pagado: montoPago,
         cliente: clienteSeleccionado?.nombre || '',
         clienteId: clienteSeleccionado?.id,
+        vendedorId: usuarioSesion?.id,
+        vendedorNombre: usuarioSesion?.nombre || 'Usuario',
       });
       imprimirTicket();
       setCarrito([]);
@@ -253,6 +263,7 @@ export default function POSPage() {
             .cambio { color: #059669; }
             .footer { text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px dashed #000; font-size: 11px; }
             .advertencia { background: #fef3c7; padding: 8px; margin-top: 10px; border-radius: 3px; font-size: 11px; color: #92400e; }
+            ${TICKET_POLITICA_CAMBIO_CSS}
           </style>
         </head>
         <body>
@@ -260,6 +271,7 @@ export default function POSPage() {
             <h2>Punto de Venta</h2>
             <p><strong>Tenis y zapatos</strong></p>
             <p>${new Date().toLocaleString('es-MX')}</p>
+            ${usuarioSesion?.nombre ? `<p><strong>Atendió:</strong> ${usuarioSesion.nombre}</p>` : ''}
             ${clienteSeleccionado ? `<div class="cliente"><strong>Cliente:</strong> ${clienteSeleccionado.nombre}</div>` : ''}
           </div>
           
@@ -310,6 +322,7 @@ export default function POSPage() {
             <p><strong>${pendienteTicket > 0 ? 'Venta con crédito pendiente' : 'Gracias por su compra'}</strong></p>
             <p style="margin-top: 5px;">Conserve este ticket</p>
           </div>
+          ${TICKET_POLITICA_CAMBIO_HTML}
         </body>
       </html>
     `;

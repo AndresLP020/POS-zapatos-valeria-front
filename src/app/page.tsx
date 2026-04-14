@@ -24,8 +24,8 @@ export default function HomePage() {
     }
     setLoading(true);
     try {
-      await login(user, pass);
-      setPosSession();
+      const data = await login(user, pass);
+      setPosSession(data.user);
       router.push('/pos/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Usuario o contraseña incorrectos');

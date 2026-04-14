@@ -1,8 +1,6 @@
 'use client';
 
-import { createContext, useContext, useCallback, useEffect, useState } from 'react';
-
-const STORAGE_KEY = 'pos-admin-mode';
+import { createContext, useContext, useCallback, useState } from 'react';
 
 type AdminModeContextType = {
   isAdminMode: boolean;
@@ -18,42 +16,21 @@ export function AdminModeProvider({ children }: { children: React.ReactNode }) {
   const [isAdminMode, setState] = useState(false);
   const [showMensajeIngreso, setShowMensajeIngreso] = useState(false);
 
-  useEffect(() => {
-    try {
-      const stored = sessionStorage.getItem(STORAGE_KEY) === '1';
-      setState(stored);
-    } catch {}
-  }, []);
-
   const setAdminMode = useCallback((value: boolean) => {
     setState(value);
-    try {
-      if (value) sessionStorage.setItem(STORAGE_KEY, '1');
-      else sessionStorage.removeItem(STORAGE_KEY);
-    } catch {}
     if (!value) setShowMensajeIngreso(false);
   }, []);
 
   const entrarAdminMode = useCallback(() => {
     setState(true);
     setShowMensajeIngreso(true);
-    try {
-      sessionStorage.setItem(STORAGE_KEY, '1');
-    } catch {}
   }, []);
 
   const cerrarMensajeIngreso = useCallback(() => setShowMensajeIngreso(false), []);
 
   const value: AdminModeContextType = {
     isAdminMode,
-    setAdminMode: (v) => {
-      setState(v);
-      try {
-        if (v) sessionStorage.setItem(STORAGE_KEY, '1');
-        else sessionStorage.removeItem(STORAGE_KEY);
-      } catch {}
-      if (!v) setShowMensajeIngreso(false);
-    },
+    setAdminMode,
     entrarAdminMode,
     showMensajeIngreso,
     cerrarMensajeIngreso,

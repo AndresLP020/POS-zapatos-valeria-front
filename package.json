@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "face-api.js": "^0.22.2",
+    "jsbarcode": "^3.12.3",
+    "jspdf": "^4.2.1",
     "next": "^14.2.0",
     "postprocessing": "^6.39.0",
     "react": "^18.2.0",

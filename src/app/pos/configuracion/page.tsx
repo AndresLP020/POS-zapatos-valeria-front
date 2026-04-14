@@ -2,21 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import {
-  getUsuarios,
-  postUsuario,
-  putUsuario,
-  deleteUsuario,
-  type Usuario,
-  type PermisosPOS,
-} from '@/lib/api';
-
-const permisosDefault: PermisosPOS = {
-  hacerVentas: true,
-  darDeBajaProductos: false,
-  actualizarProductos: true,
-  borrarProductos: false,
-};
+import { getUsuarios, postUsuario, putUsuario, deleteUsuario, type Usuario } from '@/lib/api';
 
 export default function ConfiguracionPage() {
   const { theme, setTheme } = useTheme();
@@ -29,7 +15,7 @@ export default function ConfiguracionPage() {
     password: '',
     nombre: '',
     telefono: '',
-    permisos: { ...permisosDefault },
+    rol: 'trabajador' as 'trabajador' | 'bodega',
   });
   const [error, setError] = useState('');
 
@@ -58,7 +44,7 @@ export default function ConfiguracionPage() {
         password: '',
         nombre: u.nombre,
         telefono: u.telefono || '',
-        permisos: { ...u.permisos },
+        rol: (u.rol === 'bodega' ? 'bodega' : 'trabajador') as 'trabajador' | 'bodega',
       });
     } else {
       setEditingId(null);
@@ -67,7 +53,7 @@ export default function ConfiguracionPage() {
         password: '',
         nombre: '',
         telefono: '',
-        permisos: { ...permisosDefault },
+        rol: 'trabajador' as 'trabajador' | 'bodega',
       });
     }
     setModalUsuario(true);
@@ -97,7 +83,7 @@ export default function ConfiguracionPage() {
           ...(form.password ? { password: form.password } : undefined),
           nombre: form.nombre.trim(),
           telefono: form.telefono.trim() || undefined,
-          permisos: form.permisos,
+          rol: form.rol,
         });
       } else {
         await postUsuario({
@@ -105,7 +91,7 @@ export default function ConfiguracionPage() {
           password: form.password,
           nombre: form.nombre.trim(),
           telefono: form.telefono.trim() || undefined,
-          permisos: form.permisos,
+          rol: form.rol,
         });
       }
       await cargarDatos();
@@ -123,13 +109,6 @@ export default function ConfiguracionPage() {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const togglePermiso = (key: keyof PermisosPOS) => {
-    setForm((f) => ({
-      ...f,
-      permisos: { ...f.permisos, [key]: !f.permisos[key] },
-    }));
   };
 
   return (
@@ -201,6 +180,7 @@ export default function ConfiguracionPage() {
                     <th className="text-left text-slate-400 font-semibold px-6 py-4">Nombre</th>
                     <th className="text-left text-slate-400 font-semibold px-6 py-4">Correo</th>
                     <th className="text-left text-slate-400 font-semibold px-6 py-4">Teléfono</th>
+                    <th className="text-left text-slate-400 font-semibold px-6 py-4">Rol</th>
                     <th className="text-left text-slate-400 font-semibold px-6 py-4">Permisos</th>
                     <th className="text-right text-slate-400 font-semibold px-6 py-4 w-28">Acciones</th>
                   </tr>
@@ -211,6 +191,11 @@ export default function ConfiguracionPage() {
                       <td className="px-6 py-3 text-white font-medium">{u.nombre || '—'}</td>
                       <td className="px-6 py-3 text-slate-300">{u.email}</td>
                       <td className="px-6 py-3 text-slate-400">{u.telefono || '—'}</td>
+                      <td className="px-6 py-3">
+                        <span className={`px-2 py-0.5 rounded text-xs ${u.rol === 'bodega' ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-500/20 text-slate-300'}`}>
+                          {u.rol === 'bodega' ? 'Bodega' : 'Trabajador'}
+                        </span>
+                      </td>
                       <td className="px-6 py-3">
                         <span className="flex flex-wrap gap-1">
                           {u.permisos.hacerVentas && <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs">Ventas</span>}
@@ -282,27 +267,15 @@ export default function ConfiguracionPage() {
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-sm font-medium mb-2">Permisos en el punto de venta</label>
-                <div className="flex flex-wrap gap-4">
-                  {(
-                    [
-                      { key: 'hacerVentas' as const, label: 'Hacer ventas' },
-                      { key: 'darDeBajaProductos' as const, label: 'Dar de baja productos' },
-                      { key: 'actualizarProductos' as const, label: 'Actualizar productos' },
-                      { key: 'borrarProductos' as const, label: 'Borrar productos' },
-                    ] as const
-                  ).map(({ key, label }) => (
-                    <label key={key} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={form.permisos[key]}
-                        onChange={() => togglePermiso(key)}
-                        className="rounded border-slate-500 text-emerald-500 focus:ring-emerald-500"
-                      />
-                      <span className="text-sm text-white">{label}</span>
-                    </label>
-                  ))}
-                </div>
+                <label className="block text-slate-400 text-sm font-medium mb-1">Rol del usuario</label>
+                <select
+                  value={form.rol}
+                  onChange={(e) => setForm((f) => ({ ...f, rol: e.target.value as 'trabajador' | 'bodega' }))}
+                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                >
+                  <option value="trabajador">Trabajador (tienda)</option>
+                  <option value="bodega">Bodega</option>
+                </select>
               </div>
               {error && <p className="text-red-400 text-sm">{error}</p>}
               <div className="flex gap-3 pt-2">

@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getVentas, getDevoluciones, getPerdidas, postDevolucion, getProductos, putVenta, type Devolucion, type PerdidaItem, type Producto, type VentaItemEdit } from '@/lib/api';
 import { formatearMoneda, formatearCantidad } from '@/lib/utils';
+import { TICKET_POLITICA_CAMBIO_CSS, TICKET_POLITICA_CAMBIO_HTML } from '@/lib/ticket-politica-cambio';
 
 type Venta = {
   id: number;
@@ -13,6 +14,7 @@ type Venta = {
   pendiente?: number;
   items: { id?: number; nombre: string; cantidad: number; precio: number; costo?: number }[];
   cliente?: string;
+  vendedorNombre?: string;
 };
 
 type FiltroFecha = 'todos' | 'hoy' | 'ayer' | 'semana' | 'mes' | 'personalizado';
@@ -40,6 +42,7 @@ function VentasPageContent() {
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
   const [busqueda, setBusqueda] = useState('');
+  const [filtroTrabajador, setFiltroTrabajador] = useState('todos');
   const [ventaExpandida, setVentaExpandida] = useState<number | null>(null);
   const [ordenarPor, setOrdenarPor] = useState<'fecha' | 'total'>('fecha');
   const [ordenAscendente, setOrdenAscendente] = useState(false);
@@ -133,6 +136,11 @@ function VentasPageContent() {
         break;
     }
 
+    // Filtro por trabajador (vendedor)
+    if (filtroTrabajador !== 'todos') {
+      filtradas = filtradas.filter((v) => (v.vendedorNombre || 'Sin asignar') === filtroTrabajador);
+    }
+
     // Búsqueda
     if (busqueda.trim()) {
       const termino = busqueda.toLowerCase();
@@ -140,6 +148,7 @@ function VentasPageContent() {
         (v) =>
           v.id.toString().includes(termino) ||
           v.cliente?.toLowerCase().includes(termino) ||
+          v.vendedorNombre?.toLowerCase().includes(termino) ||
           v.items.some((i) => i.nombre.toLowerCase().includes(termino))
       );
     }
@@ -156,7 +165,11 @@ function VentasPageContent() {
     });
 
     setVentasFiltradas(filtradas);
-  }, [ventas, filtroFecha, fechaInicio, fechaFin, busqueda, ordenarPor, ordenAscendente]);
+  }, [ventas, filtroFecha, fechaInicio, fechaFin, filtroTrabajador, busqueda, ordenarPor, ordenAscendente]);
+
+  const trabajadoresUnicos = Array.from(new Set(ventas.map((v) => v.vendedorNombre || 'Sin asignar'))).sort((a, b) =>
+    a.localeCompare(b, 'es', { sensitivity: 'base' })
+  );
 
   const formatearFecha = (f: string) => {
     const d = new Date(f);
@@ -370,6 +383,7 @@ function VentasPageContent() {
             .modif h4 { margin: 0 0 8px 0; font-size: 12px; }
             .modif ul { margin: 0; padding-left: 18px; }
             .footer { text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px dashed #000; font-size: 11px; }
+            ${TICKET_POLITICA_CAMBIO_CSS}
           </style>
         </head>
         <body>
@@ -378,6 +392,7 @@ function VentasPageContent() {
             <p><strong>Tenis y zapatos</strong></p>
             <p><strong>Ticket corregido #${venta.id}</strong></p>
             <p class="sub">${new Date().toLocaleString('es-MX')}</p>
+            ${venta.vendedorNombre ? `<p><strong>Atendió:</strong> ${venta.vendedorNombre}</p>` : ''}
             ${venta.cliente ? `<div class="cliente"><strong>Cliente:</strong> ${venta.cliente}</div>` : ''}
           </div>
           
@@ -428,6 +443,7 @@ function VentasPageContent() {
             <p><strong>Ticket reimpreso por corrección</strong></p>
             <p style="margin-top: 5px;">Conserve este ticket</p>
           </div>
+          ${TICKET_POLITICA_CAMBIO_HTML}
         </body>
       </html>
     `;
@@ -556,10 +572,25 @@ function VentasPageContent() {
                 type="text"
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
-                placeholder="Buscar por número, cliente o producto..."
+                placeholder="Buscar por número, cliente, trabajador o producto..."
                 className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-slate-300 text-sm">Trabajador:</span>
+            <select
+              value={filtroTrabajador}
+              onChange={(e) => setFiltroTrabajador(e.target.value)}
+              className="px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500 min-w-[180px]"
+            >
+              <option value="todos">Todos</option>
+              {trabajadoresUnicos.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-slate-300 text-sm">Ordenar por:</span>
@@ -658,6 +689,14 @@ function VentasPageContent() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                               </svg>
                               {venta.cliente}
+                            </span>
+                          )}
+                          {venta.vendedorNombre && (
+                            <span className="flex items-center gap-1.5">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A9 9 0 1118.88 17.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                              </svg>
+                              {venta.vendedorNombre}
                             </span>
                           )}
                         </div>
