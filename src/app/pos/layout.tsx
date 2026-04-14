@@ -1,13 +1,11 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { AdminModeProvider, useAdminMode } from '@/contexts/AdminModeContext';
 import { Sidebar, MobileHeaderTitle } from '@/components/Sidebar';
+import { GridScan } from '@/components/GridScan';
 import { useRouter, usePathname } from 'next/navigation';
-
-const FloatingLines = dynamic(() => import('@/components/FloatingLines'), { ssr: false });
 
 const RUTAS_SOLO_ADMIN = [
   '/pos/gastos-admin',
@@ -104,19 +102,28 @@ export default function POSLayout({
       <AdminModeProvider>
         <>
           <div
-            className="pointer-events-none fixed inset-0 z-[5] h-[100dvh] w-full min-h-[100dvh] bg-[#030712]"
+            className="pointer-events-none fixed inset-0 z-[5] h-[100dvh] w-full min-h-[100dvh] overflow-hidden bg-[#030712]"
             aria-hidden
           >
-            <FloatingLines
-              enabledWaves={['top', 'middle', 'bottom']}
-              lineCount={7}
-              lineDistance={5}
-              bendRadius={5}
-              bendStrength={-0.5}
-              interactive={false}
-              parallax={false}
-              mixBlendMode="normal"
-            />
+            <div className="absolute inset-0 z-0">
+              <GridScan
+                sensitivity={0.55}
+                lineThickness={1}
+                linesColor="#2e4a8f"
+                gridScale={0.13}
+                scanColor="#8ec5ff"
+                scanOpacity={0.45}
+                enablePost
+                bloomIntensity={0.7}
+                chromaticAberration={0.002}
+                noiseIntensity={0.01}
+                enableWebcam={false}
+                showPreview={false}
+                enableGyro={false}
+                scanOnClick={false}
+              />
+            </div>
+            <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-slate-950/35 via-slate-950/55 to-slate-950/85" />
           </div>
           <div className="pos-layout relative z-[15] flex h-screen min-h-0 overflow-hidden bg-transparent">
             <AdminRouteGuard />

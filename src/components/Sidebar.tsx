@@ -141,7 +141,7 @@ export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: (
     <>
       {/* Desktop: sidebar siempre visible en flujo */}
       <aside
-        className="w-60 flex-shrink-0 bg-blue-950/90 border-r border-blue-900/60 shadow-xl hidden md:flex md:flex-col backdrop-blur-sm"
+        className="w-60 flex-shrink-0 bg-[#050914] border-r border-slate-900/80 shadow-xl hidden md:flex md:flex-col backdrop-blur-sm"
       >
         {asideContent}
       </aside>
@@ -160,7 +160,7 @@ export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: (
           <aside
             className={`
               fixed inset-y-0 left-0 z-[101] w-[min(280px,85vw)] max-w-[280px] flex flex-col shadow-2xl
-              bg-blue-950/95 border-r border-blue-900/60
+              bg-[#050914] border-r border-slate-900/80
               transform transition-transform duration-200 ease-out
               md:hidden
               ${open ? 'translate-x-0' : '-translate-x-full pointer-events-none'}
