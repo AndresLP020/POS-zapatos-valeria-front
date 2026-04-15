@@ -237,7 +237,7 @@ export default function GastosAdminPage() {
   return (
     <div className="flex flex-col min-h-full text-white">
       {/* Header */}
-      <header className="sticky top-0 z-10 flex items-start justify-between border-b border-slate-700/80 bg-slate-900/90 backdrop-blur-sm px-6 py-4">
+      <header className="sticky top-0 z-10 flex items-start justify-between border-b border-blue-800/45 bg-blue-950/75 backdrop-blur-md px-6 py-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
             <span className="text-xl font-bold text-blue-400">$</span>
@@ -259,7 +259,7 @@ export default function GastosAdminPage() {
       </header>
 
       {/* Barra resumen / debug */}
-      <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-slate-800/60 border-b border-slate-700/80">
+      <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-blue-950/50 backdrop-blur-md border-b border-blue-800/45">
         <div className="flex flex-wrap items-center gap-4">
           <span className="text-slate-400 text-sm font-medium">
             Gastos Admin: {gastos.length} | Total: {fm(totalGeneral)}
@@ -291,27 +291,27 @@ export default function GastosAdminPage() {
       {/* KPIs */}
       <div className="px-6 py-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-6">
-          <div className="rounded-2xl bg-slate-800/80 border border-emerald-500/30 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-emerald-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Ingresos Mensuales</p>
             <p className="text-2xl font-bold text-emerald-400 mt-1 tabular-nums">{fm(ingresosTotalesMes)}</p>
             <p className="text-xs text-slate-500 mt-1">Ventas pagadas del mes</p>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-amber-500/30 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-amber-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Costo de Ventas</p>
             <p className="text-2xl font-bold text-amber-400 mt-1 tabular-nums">{fm(costoVentasMes)}</p>
             <p className="text-xs text-slate-500 mt-1">Costo de productos vendidos</p>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-red-500/30 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-red-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Gastos Administrativos</p>
             <p className="text-2xl font-bold text-red-400 mt-1 tabular-nums">{fm(totalGastosMes)}</p>
             <p className="text-xs text-slate-500 mt-1">Gastos del mes (este apartado)</p>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-emerald-500/30 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-emerald-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Ganancia Neta Mensual</p>
             <p className={`text-2xl font-bold mt-1 tabular-nums ${gananciaNetaMes >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>{fm(gananciaNetaMes)}</p>
             <p className="text-xs text-slate-500 mt-1">Ingresos − Costo ventas − Gastos Admin − Nóminas</p>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-violet-500/30 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-violet-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Efectivo Disponible</p>
             <p className="text-2xl font-bold text-violet-400 mt-1 tabular-nums">{fm(efectivoDisponible)}</p>
             <p className="text-xs text-slate-500 mt-1">Ganancia neta (resumen)</p>
@@ -329,7 +329,7 @@ export default function GastosAdminPage() {
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                   categoriaFiltro === cat
                     ? 'bg-blue-500 text-white shadow-lg'
-                    : 'bg-slate-700/80 text-slate-300 hover:bg-slate-600 border border-slate-600/50'
+                    : 'bg-slate-700/80 text-slate-300 hover:bg-slate-600 border border-blue-800/40/50'
                 }`}
               >
                 {cat}
@@ -342,7 +342,7 @@ export default function GastosAdminPage() {
               className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                 categoriaFiltro === 'Gastos de la empresa'
                   ? 'bg-blue-500 text-white'
-                  : 'bg-slate-700/80 text-slate-300 hover:bg-slate-600 border border-slate-600/50'
+                  : 'bg-slate-700/80 text-slate-300 hover:bg-slate-600 border border-blue-800/40/50'
               }`}
             >
               Gastos de la empresa
@@ -351,14 +351,14 @@ export default function GastosAdminPage() {
         </div>
 
         {/* Resumen por periodo y categoría */}
-        <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 p-4 mb-6 inline-flex flex-col gap-2">
+        <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 p-4 mb-6 inline-flex flex-col gap-2">
           <h2 className="text-slate-200 font-semibold">Resumen por periodo y categoría</h2>
           <div className="flex items-center gap-2">
             <label className="text-slate-400 text-sm">Selecciona periodo:</label>
             <select
               value={periodoResumen}
               onChange={(e) => setPeriodoResumen(e.target.value as PeriodoResumen)}
-              className="rounded-xl bg-slate-700 border border-slate-600 text-white px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="rounded-xl bg-slate-700 border border-blue-800/40 text-white px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
             >
               <option value="diario">Diario</option>
               <option value="semanal">Semanal</option>
@@ -377,7 +377,7 @@ export default function GastosAdminPage() {
               type="date"
               value={fechaDesde}
               onChange={(e) => setFechaDesde(e.target.value)}
-              className="rounded-xl bg-slate-700/80 border border-slate-600 px-3 py-2 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="rounded-xl bg-slate-700/80 border border-blue-800/40 px-3 py-2 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -386,10 +386,10 @@ export default function GastosAdminPage() {
               type="date"
               value={fechaHasta}
               onChange={(e) => setFechaHasta(e.target.value)}
-              className="rounded-xl bg-slate-700/80 border border-slate-600 px-3 py-2 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="rounded-xl bg-slate-700/80 border border-blue-800/40 px-3 py-2 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
             />
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 px-5 py-3 flex items-center gap-3">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 px-5 py-3 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
               <span className="text-blue-400 font-bold">$</span>
             </div>
@@ -402,7 +402,7 @@ export default function GastosAdminPage() {
 
         {/* Resumen: en qué categoría se gasta más */}
         {resumenPorCategoria.length > 0 && (
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 p-5 mb-6">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 p-5 mb-6">
             <h2 className="text-slate-200 font-semibold mb-1">Dónde se gasta más (periodo filtrado)</h2>
             <p className="text-slate-500 text-sm mb-4">Total por categoría, ordenado de mayor a menor gasto</p>
             <div className="space-y-3">
@@ -432,11 +432,11 @@ export default function GastosAdminPage() {
         )}
 
         {/* Tabla de gastos */}
-        <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
+        <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-700 bg-slate-800">
+                <tr className="border-b border-blue-800/40 bg-blue-950/20 backdrop-blur-sm">
                   <th className="text-left text-slate-400 font-semibold text-sm px-6 py-4">Fecha</th>
                   <th className="text-left text-slate-400 font-semibold text-sm px-6 py-4">Descripción</th>
                   <th className="text-left text-slate-400 font-semibold text-sm px-6 py-4">Categoría</th>
@@ -468,7 +468,7 @@ export default function GastosAdminPage() {
                   </tr>
                 ) : (
                   gastosFiltrados.map((g) => (
-                    <tr key={g.id} className="border-b border-slate-700/50 hover:bg-slate-700/30 transition">
+                    <tr key={g.id} className="border-b border-blue-900/35 hover:bg-blue-900/30 transition">
                       <td className="px-6 py-3 text-slate-300 text-sm">{formatearFecha(g.fecha)}</td>
                       <td className="px-6 py-3 text-white">{g.descripcion}</td>
                       <td className="px-6 py-3 text-slate-400 text-sm">{g.categoria}</td>
@@ -508,10 +508,10 @@ export default function GastosAdminPage() {
       {modalAbierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={cerrarModal}>
           <div
-            className="bg-slate-800 rounded-2xl border border-slate-700 shadow-elevated-lg w-full max-w-md"
+            className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-elevated-lg w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-6 py-4 border-b border-slate-700">
+            <div className="px-6 py-4 border-b border-blue-800/40">
               <h2 className="text-lg font-semibold text-white">
                 {editingId ? 'Editar gasto' : 'Agregar gasto'}
               </h2>
@@ -523,7 +523,7 @@ export default function GastosAdminPage() {
                   type="date"
                   value={form.fecha}
                   onChange={(e) => setForm((f) => ({ ...f, fecha: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                   required
                 />
               </div>
@@ -534,7 +534,7 @@ export default function GastosAdminPage() {
                   value={form.descripcion}
                   onChange={(e) => setForm((f) => ({ ...f, descripcion: e.target.value }))}
                   placeholder="Ej. Pago de luz"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   required
                 />
               </div>
@@ -543,7 +543,7 @@ export default function GastosAdminPage() {
                 <select
                   value={form.categoria}
                   onChange={(e) => setForm((f) => ({ ...f, categoria: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                 >
                   {CATEGORIAS_GASTOS.map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -559,7 +559,7 @@ export default function GastosAdminPage() {
                   value={form.monto}
                   onChange={(e) => setForm((f) => ({ ...f, monto: e.target.value }))}
                   placeholder="0.00"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   required
                 />
               </div>

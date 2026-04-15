@@ -178,7 +178,7 @@ export default function DeudoresPage() {
     return (
       <div className="flex flex-col h-full text-white">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+        <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-white mb-1">Gestión de Deudores</h1>
@@ -188,17 +188,17 @@ export default function DeudoresPage() {
         </div>
 
         {/* Estadísticas */}
-        <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30">
+        <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+            <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-4 border border-blue-800/40">
               <p className="text-slate-400 text-sm mb-1">Total de Deudores</p>
               <p className="text-2xl font-bold text-white">{deudores.length}</p>
             </div>
-            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+            <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-4 border border-blue-800/40">
               <p className="text-slate-400 text-sm mb-1">Deuda Total</p>
               <p className="text-2xl font-bold text-amber-400">${formatearMoneda(totalGeneral)}</p>
             </div>
-            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+            <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-4 border border-blue-800/40">
               <p className="text-slate-400 text-sm mb-1">Ventas Pendientes</p>
               <p className="text-2xl font-bold text-white">
                 {deudores.reduce((sum, d) => sum + d.ventasPendientes.length, 0)}
@@ -208,7 +208,7 @@ export default function DeudoresPage() {
         </div>
 
         {/* Búsqueda */}
-        <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30">
+        <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm">
           <div className="relative">
             <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -218,7 +218,7 @@ export default function DeudoresPage() {
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Buscar por nombre, teléfono o email..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
         </div>
@@ -241,7 +241,7 @@ export default function DeudoresPage() {
                 <button
                   key={deudor.cliente.id}
                   onClick={() => setDeudorSeleccionado(deudor)}
-                  className="text-left p-5 bg-slate-800 rounded-xl border border-slate-700 hover:border-green-500/50 hover:bg-slate-700/50 transition"
+                  className="text-left p-5 bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 hover:border-green-500/50 hover:bg-blue-900/45 transition"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
@@ -273,7 +273,7 @@ export default function DeudoresPage() {
   return (
     <div className="flex flex-col h-full text-white">
       {/* Header con botón volver */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setDeudorSeleccionado(null)}
@@ -294,7 +294,7 @@ export default function DeudoresPage() {
       </div>
 
       {/* Información de contacto */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm">
         <div className="flex flex-wrap gap-4 text-sm">
           {deudorSeleccionado.cliente.telefono && (
             <div className="flex items-center gap-2 text-slate-300">
@@ -328,9 +328,9 @@ export default function DeudoresPage() {
       <div className="flex-1 overflow-auto p-6">
         <div className="space-y-4">
           {deudorSeleccionado.ventasPendientes.map((venta) => (
-            <div key={venta.id} className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+            <div key={venta.id} className="bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 overflow-hidden">
               {/* Header de la venta */}
-              <div className="p-5 bg-slate-900/50 border-b border-slate-700">
+              <div className="p-5 bg-blue-950/45 backdrop-blur-sm border-b border-blue-800/40">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
@@ -357,7 +357,7 @@ export default function DeudoresPage() {
                 <h4 className="text-sm font-semibold text-slate-300 mb-3">Productos:</h4>
                 <div className="space-y-2 mb-4">
                   {venta.items.map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between py-2 px-3 rounded-lg bg-slate-700/50 border border-slate-600">
+                    <div key={idx} className="flex items-center justify-between py-2 px-3 rounded-lg bg-slate-700/50 border border-blue-800/40">
                       <div className="flex-1">
                         <p className="text-white font-medium">{item.nombre}</p>
                         <p className="text-sm text-slate-400">
@@ -372,7 +372,7 @@ export default function DeudoresPage() {
                 </div>
 
                 {/* Resumen financiero */}
-                <div className="pt-4 border-t border-slate-700 space-y-2">
+                <div className="pt-4 border-t border-blue-800/40 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-400">Total de la venta:</span>
                     <span className="text-white font-semibold">${formatearMoneda(venta.total)}</span>
@@ -381,7 +381,7 @@ export default function DeudoresPage() {
                     <span className="text-slate-400">Dinero que dejó:</span>
                     <span className="text-green-400 font-semibold">${formatearMoneda(venta.pagado || 0)}</span>
                   </div>
-                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-slate-700">
+                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-blue-800/40">
                     <span className="text-slate-300">Lo que no pagó:</span>
                     <span className="text-amber-400">${formatearMoneda(venta.pendiente || 0)}</span>
                   </div>
@@ -403,7 +403,7 @@ export default function DeudoresPage() {
       {/* Modal de abono */}
       {ventaAbonando && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-xl border border-slate-700 w-full max-w-md p-6">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-white">Registrar Abono</h2>
               <button
@@ -421,7 +421,7 @@ export default function DeudoresPage() {
               if (!venta) return null;
               return (
                 <>
-                  <div className="mb-4 p-4 rounded-lg bg-slate-700/50 border border-slate-600">
+                  <div className="mb-4 p-4 rounded-lg bg-slate-700/50 border border-blue-800/40">
                     <div className="text-sm text-slate-400 mb-2">Venta #{venta.id}</div>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="text-slate-300">Total:</span>
@@ -431,7 +431,7 @@ export default function DeudoresPage() {
                       <span className="text-slate-300">Pagado:</span>
                       <span className="text-green-400 font-medium">${formatearMoneda(venta.pagado || 0)}</span>
                     </div>
-                    <div className="flex justify-between text-lg font-bold pt-2 border-t border-slate-600">
+                    <div className="flex justify-between text-lg font-bold pt-2 border-t border-blue-800/40">
                       <span className="text-slate-300">Pendiente:</span>
                       <span className="text-amber-400">${formatearMoneda(venta.pendiente || 0)}</span>
                     </div>
@@ -448,7 +448,7 @@ export default function DeudoresPage() {
                       min="0.01"
                       max={venta.pendiente || 0}
                       step="0.01"
-                      className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                       placeholder="0.00"
                       autoFocus
                     />

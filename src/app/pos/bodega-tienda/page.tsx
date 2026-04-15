@@ -205,7 +205,7 @@ export default function BodegaTiendaPage() {
 
   return (
     <div className="flex flex-col h-full text-white">
-      <div className="px-4 sm:px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+      <div className="px-4 sm:px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
         <h1 className="text-xl sm:text-2xl font-bold">Bodega y tienda física</h1>
         <p className="text-slate-400 text-sm mt-1">
           Flujo dividido: tienda solicita, bodega autoriza salida y se registra quién recoge.
@@ -214,15 +214,15 @@ export default function BodegaTiendaPage() {
 
       <div className="flex-1 overflow-auto p-4 sm:p-6 space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="rounded-xl border border-slate-700 bg-slate-800/40 p-4">
+          <div className="rounded-xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-4">
             <p className="text-slate-400 text-xs uppercase tracking-wide">Stock total</p>
             <p className="text-2xl font-bold mt-1">{formatearCantidad(items.reduce((s, p) => s + p.stockTotal, 0))}</p>
           </div>
-          <div className="rounded-xl border border-slate-700 bg-slate-800/40 p-4">
+          <div className="rounded-xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-4">
             <p className="text-slate-400 text-xs uppercase tracking-wide">En bodega</p>
             <p className="text-2xl font-bold mt-1 text-amber-400">{formatearCantidad(items.reduce((s, p) => s + p.stockBodega, 0))}</p>
           </div>
-          <div className="rounded-xl border border-slate-700 bg-slate-800/40 p-4">
+          <div className="rounded-xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-4">
             <p className="text-slate-400 text-xs uppercase tracking-wide">En tienda física</p>
             <p className="text-2xl font-bold mt-1 text-emerald-400">{formatearCantidad(items.reduce((s, p) => s + p.stockTienda, 0))}</p>
           </div>
@@ -242,7 +242,7 @@ export default function BodegaTiendaPage() {
                 <select
                   value={productoId === '' ? '' : productoId}
                   onChange={(e) => setProductoId(e.target.value ? Number(e.target.value) : '')}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none"
                 >
                   <option value="">Seleccionar...</option>
                   {items.map((p) => (
@@ -255,7 +255,7 @@ export default function BodegaTiendaPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-slate-300 text-sm mb-1">Cantidad</label>
-                  <input type="number" min={1} step={1} value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none" />
+                  <input type="number" min={1} step={1} value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none" />
                 </div>
                 <div>
                   <label className="block text-slate-300 text-sm mb-1">Solicitante (empleado de tienda)</label>
@@ -263,7 +263,7 @@ export default function BodegaTiendaPage() {
                     type="text"
                     value={solicitadoPor}
                     onChange={(e) => setSolicitadoPor(e.target.value)}
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none"
                     placeholder="Ej. Valeria (cajera)"
                   />
                 </div>
@@ -273,7 +273,7 @@ export default function BodegaTiendaPage() {
                     type="text"
                     value={recogidoPor}
                     onChange={(e) => setRecogidoPor(e.target.value)}
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none"
                     placeholder="Ej. Andrés (mensajero)"
                   />
                 </div>
@@ -293,7 +293,7 @@ export default function BodegaTiendaPage() {
             <h2 className="text-lg font-semibold text-amber-200">Parte 2 · Bodega autoriza salida</h2>
             <p className="text-amber-100/80 text-sm mt-1">Personal de bodega puede seleccionar si registra una salida o una entrada.</p>
             {!canManageBodega ? (
-              <div className="mt-4 rounded-xl border border-amber-500/30 bg-slate-900/50 p-4 text-sm text-amber-100">
+              <div className="mt-4 rounded-xl border border-amber-500/30 bg-blue-950/45 backdrop-blur-sm p-4 text-sm text-amber-100">
                 Este apartado es solo para usuarios con rol <strong>bodega</strong> o <strong>admin</strong>.
               </div>
             ) : (
@@ -303,7 +303,7 @@ export default function BodegaTiendaPage() {
               <select
                 value={tipoOperacionBodega}
                 onChange={(e) => setTipoOperacionBodega(e.target.value as 'salida' | 'entrada')}
-                className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none"
+                className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none"
               >
                 <option value="salida">Salida de bodega (autorizar solicitud a tienda)</option>
                 <option value="entrada">Entrada a bodega (recibir devolución/retorno de tienda)</option>
@@ -320,7 +320,7 @@ export default function BodegaTiendaPage() {
                     type="text"
                     value={autorizadoPor}
                     onChange={(e) => setAutorizadoPor(e.target.value)}
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none"
                     placeholder="Ej. Juan (encargado bodega)"
                   />
                 </div>
@@ -331,7 +331,7 @@ export default function BodegaTiendaPage() {
                     <p className="text-slate-400 text-sm">No hay solicitudes pendientes.</p>
                   ) : (
                     solicitudesPendientes.map((s) => (
-                      <div key={s.id} className="rounded-xl border border-slate-700 bg-slate-900/40 p-3">
+                      <div key={s.id} className="rounded-xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-3">
                         <p className="text-sm font-semibold text-white">{s.productoNombre} · {formatearCantidad(s.cantidad)}</p>
                         <p className="text-xs text-slate-300 mt-1">Solicitante tienda: {s.solicitadoPor || '-'} · Recolector: {s.recogidoPor || '-'}</p>
                         <button
@@ -354,7 +354,7 @@ export default function BodegaTiendaPage() {
                   <select
                     value={entradaProductoId === '' ? '' : entradaProductoId}
                     onChange={(e) => setEntradaProductoId(e.target.value ? Number(e.target.value) : '')}
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none"
                   >
                     <option value="">Seleccionar...</option>
                     {items.map((p) => (
@@ -366,15 +366,15 @@ export default function BodegaTiendaPage() {
                 </div>
                 <div>
                   <label className="block text-slate-300 text-sm mb-1">Cantidad</label>
-                  <input type="number" min={1} step={1} value={entradaCantidad} onChange={(e) => setEntradaCantidad(e.target.value)} className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none" />
+                  <input type="number" min={1} step={1} value={entradaCantidad} onChange={(e) => setEntradaCantidad(e.target.value)} className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none" />
                 </div>
                 <div>
                   <label className="block text-slate-300 text-sm mb-1">Entrega (tienda)</label>
-                  <input type="text" value={entregaTiendaPor} onChange={(e) => setEntregaTiendaPor(e.target.value)} className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none" />
+                  <input type="text" value={entregaTiendaPor} onChange={(e) => setEntregaTiendaPor(e.target.value)} className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none" />
                 </div>
                 <div>
                   <label className="block text-slate-300 text-sm mb-1">Recibe (bodega)</label>
-                  <input type="text" value={recibeBodegaPor} onChange={(e) => setRecibeBodegaPor(e.target.value)} className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2.5 text-white outline-none" />
+                  <input type="text" value={recibeBodegaPor} onChange={(e) => setRecibeBodegaPor(e.target.value)} className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2.5 text-white outline-none" />
                 </div>
                 <div className="md:col-span-5">
                   <button type="submit" disabled={registrandoEntrada} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold transition">
@@ -390,7 +390,7 @@ export default function BodegaTiendaPage() {
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
 
-        <section className="rounded-2xl border border-slate-700 bg-slate-800/40 p-4 sm:p-5">
+        <section className="rounded-2xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-4 sm:p-5">
           <h2 className="text-lg font-semibold">
             {isTrabajador ? 'Mis solicitudes y movimientos' : 'Historial de solicitudes y salidas'}
           </h2>
@@ -406,7 +406,7 @@ export default function BodegaTiendaPage() {
               <p className="text-slate-500 text-sm">Sin movimientos registrados.</p>
             ) : (
               movimientosVisibles.map((m) => (
-                <div key={m.id} className="rounded-xl border border-slate-700 bg-slate-900/40 p-3">
+                <div key={m.id} className="rounded-xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-3">
                   <p className="text-sm font-medium text-white">{m.productoNombre}</p>
                   <p className="text-xs text-slate-300 mt-1">
                     Estado: {m.estado === 'solicitado' ? 'Solicitado' : 'Autorizado'} · {m.origen} → {m.destino} · Cantidad: {formatearCantidad(m.cantidad)}
@@ -421,7 +421,7 @@ export default function BodegaTiendaPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-700 bg-slate-800/40 p-4 sm:p-5">
+        <section className="rounded-2xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-4 sm:p-5">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
             <h2 className="text-lg font-semibold">Existencias por producto</h2>
             <input
@@ -429,13 +429,13 @@ export default function BodegaTiendaPage() {
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Buscar producto, código o categoría…"
-              className="w-full sm:w-[340px] rounded-xl bg-slate-700 border border-slate-600 px-3 py-2 text-white placeholder-slate-500 outline-none"
+              className="w-full sm:w-[340px] rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2 text-white placeholder-slate-500 outline-none"
             />
           </div>
           <div className="overflow-auto">
             <table className="w-full text-sm min-w-[700px]">
               <thead>
-                <tr className="text-left text-slate-400 border-b border-slate-700">
+                <tr className="text-left text-slate-400 border-b border-blue-800/40">
                   <th className="py-2 pr-3">Producto</th>
                   <th className="py-2 pr-3">Código</th>
                   <th className="py-2 pr-3">Categoría</th>
@@ -451,7 +451,7 @@ export default function BodegaTiendaPage() {
                   <tr><td className="py-3 text-slate-500" colSpan={6}>No se encontraron productos.</td></tr>
                 ) : (
                   filtrados.map((p) => (
-                    <tr key={p.id} className="border-b border-slate-800">
+                    <tr key={p.id} className="border-b border-blue-800/40">
                       <td className="py-2 pr-3 text-white">{p.nombre}</td>
                       <td className="py-2 pr-3 font-mono text-slate-300">{p.codigo || '-'}</td>
                       <td className="py-2 pr-3 text-slate-300">{p.categoria || '-'}</td>

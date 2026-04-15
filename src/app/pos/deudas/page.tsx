@@ -118,7 +118,7 @@ function CalendarioGrid({
               onClick={() => puedeMarcar && setDiaSeleccionado(celda.fecha)}
               disabled={!puedeMarcar}
               className={`w-11 h-11 rounded-lg text-sm font-medium transition ring-2 ring-transparent ${
-                seleccionado ? 'ring-amber-400 ring-offset-2 ring-offset-slate-800' : ''
+                seleccionado ? 'ring-amber-400 ring-offset-2 ring-offset-blue-950' : ''
               } ${
                 verde
                   ? 'bg-emerald-500/90 text-white'
@@ -303,7 +303,7 @@ export default function DeudasPage() {
 
   return (
     <div className="flex flex-col min-h-full text-white">
-      <header className="sticky top-0 z-10 flex items-start justify-between border-b border-slate-700/80 bg-slate-900/90 backdrop-blur-sm px-6 py-4">
+      <header className="sticky top-0 z-10 flex items-start justify-between border-b border-blue-800/45 bg-blue-950/75 backdrop-blur-md px-6 py-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0">
             <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -311,7 +311,7 @@ export default function DeudasPage() {
             </svg>
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white">Deudas</h1>
+            <h1 className="text-xl font-bold tracking-tight text-white">Metas y ahorros</h1>
             <p className="text-slate-400 text-sm mt-0.5">Metas de ahorro para pagos a largo plazo. Ajusta cantidad o fecha y el ahorro diario se recalcula.</p>
           </div>
         </div>
@@ -326,7 +326,7 @@ export default function DeudasPage() {
         </button>
       </header>
 
-      <div className="px-6 py-4 border-b border-slate-700/80 bg-slate-800/40">
+      <div className="px-6 py-4 border-b border-blue-800/45 bg-blue-950/40 backdrop-blur-sm">
         <p className="text-slate-400 text-sm">
           Total a ahorrar por día (todas las metas activas): <span className="font-semibold text-amber-400 tabular-nums">{fm(totalDiario)}</span>
         </p>
@@ -334,7 +334,7 @@ export default function DeudasPage() {
 
       <div className="flex-1 px-6 py-6">
         {metas.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-600 bg-slate-800/40 p-12 text-center">
+          <div className="rounded-2xl border border-dashed border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-12 text-center">
             <p className="text-slate-400 mb-2">No hay metas de ahorro.</p>
             <p className="text-slate-500 text-sm mb-6">Define cuánto necesitas y para cuándo; se calculará el ahorro diario.</p>
             <button
@@ -357,10 +357,10 @@ export default function DeudasPage() {
                   key={m.id}
                   className={`rounded-2xl border p-5 shadow-elevated transition ${
                     m.estado === 'completada'
-                      ? 'border-slate-600 bg-slate-800/60 opacity-80'
+                      ? 'border-blue-800/40 bg-blue-950/50 backdrop-blur-md opacity-80'
                       : vencida
                         ? 'border-amber-500/40 bg-amber-500/10'
-                        : 'border-slate-600 bg-slate-800/80 hover:border-slate-500'
+                        : 'border-blue-800/40 bg-blue-950/55 backdrop-blur-md hover:border-blue-600/55'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-3">
@@ -439,10 +439,10 @@ export default function DeudasPage() {
       {metaCalendario && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={cerrarCalendario}>
           <div
-            className="bg-slate-800 rounded-2xl border border-slate-700 shadow-elevated-lg w-full max-w-lg overflow-hidden flex flex-col"
+            className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-elevated-lg w-full max-w-lg overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 py-4 border-b border-slate-700 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-blue-800/40 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-white truncate">Calendario — {metaCalendario.nombre}</h2>
               <button type="button" onClick={cerrarCalendario} className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white flex-shrink-0">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -450,7 +450,7 @@ export default function DeudasPage() {
                 </svg>
               </button>
             </div>
-            <div className="px-4 py-3 border-b border-slate-700/80 flex items-center justify-between gap-2">
+            <div className="px-4 py-3 border-b border-blue-800/45 flex items-center justify-between gap-2">
               <button
                 type="button"
                 onClick={() => setMesCalendario((prev) => (prev.mes === 0 ? { año: prev.año - 1, mes: 11 } : { ...prev, mes: prev.mes - 1 }))}
@@ -479,7 +479,7 @@ export default function DeudasPage() {
                 setDiaSeleccionado={setDiaSeleccionado}
               />
               {diaSeleccionado && (
-                <div className="mt-4 p-4 rounded-xl bg-slate-700/80 border border-slate-600">
+                <div className="mt-4 p-4 rounded-xl bg-slate-700/80 border border-blue-800/40">
                   <p className="text-white font-medium mb-1">
                     {new Date(diaSeleccionado).toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'short' })}
                   </p>
@@ -524,7 +524,7 @@ export default function DeudasPage() {
                 </div>
               )}
             </div>
-            <div className="px-5 py-3 border-t border-slate-700 flex items-center justify-center gap-4 text-sm text-slate-400">
+            <div className="px-5 py-3 border-t border-blue-800/40 flex items-center justify-center gap-4 text-sm text-slate-400">
               <span className="flex items-center gap-1.5"><span className="w-4 h-4 rounded bg-emerald-500/80" /> Ahorré</span>
               <span className="flex items-center gap-1.5"><span className="w-4 h-4 rounded bg-red-500/80" /> No ahorré</span>
               <span className="flex items-center gap-1.5"><span className="w-4 h-4 rounded bg-slate-600" /> Sin marcar</span>
@@ -536,10 +536,10 @@ export default function DeudasPage() {
       {modalAbierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={cerrarModal}>
           <div
-            className="bg-slate-800 rounded-2xl border border-slate-700 shadow-elevated-lg w-full max-w-md"
+            className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-elevated-lg w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-6 py-4 border-b border-slate-700">
+            <div className="px-6 py-4 border-b border-blue-800/40">
               <h2 className="text-lg font-semibold text-white">{editingId ? 'Editar meta de ahorro' : 'Nueva meta de ahorro'}</h2>
               <p className="text-slate-400 text-sm mt-0.5">Al cambiar la cantidad o la fecha, el ahorro diario se ajusta automáticamente.</p>
             </div>
@@ -551,7 +551,7 @@ export default function DeudasPage() {
                   value={form.nombre}
                   onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
                   placeholder="Ej. Refrigerador, colegiatura..."
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                   required
                 />
               </div>
@@ -564,7 +564,7 @@ export default function DeudasPage() {
                   value={form.meta}
                   onChange={(e) => setForm((f) => ({ ...f, meta: e.target.value }))}
                   placeholder="0.00"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                   required
                 />
               </div>
@@ -574,7 +574,7 @@ export default function DeudasPage() {
                   type="date"
                   value={form.fechaLimite}
                   onChange={(e) => setForm((f) => ({ ...f, fechaLimite: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                   required
                 />
               </div>

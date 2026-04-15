@@ -113,14 +113,14 @@ export default function ConfiguracionPage() {
 
   return (
     <div className="flex flex-col min-h-full text-white">
-      <header className="sticky top-0 z-10 px-6 py-4 border-b border-slate-700/80 bg-slate-900/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 px-6 py-4 border-b border-blue-800/45 bg-blue-950/75 backdrop-blur-md">
         <h1 className="text-xl font-bold tracking-tight text-white">Configuración</h1>
         <p className="text-slate-400 text-sm mt-0.5">Usuarios, permisos y apariencia</p>
       </header>
 
       <div className="flex-1 p-6 space-y-8">
         {/* Apariencia - Modo oscuro */}
-        <section className="rounded-2xl bg-slate-800/80 border border-slate-700/80 p-6 shadow-elevated">
+        <section className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 p-6 shadow-elevated">
           <h2 className="text-lg font-semibold text-white mb-1">Apariencia</h2>
           <p className="text-slate-400 text-sm mb-4">Activa o desactiva el modo oscuro de la página.</p>
           <div className="flex items-center gap-4">
@@ -129,7 +129,7 @@ export default function ConfiguracionPage() {
               role="switch"
               aria-checked={theme === 'dark'}
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className={`relative inline-flex h-8 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-800 ${
+              className={`relative inline-flex h-8 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-blue-950 ${
                 theme === 'dark' ? 'bg-emerald-500' : 'bg-slate-600'
               }`}
             >
@@ -146,8 +146,8 @@ export default function ConfiguracionPage() {
         </section>
 
         {/* Usuarios */}
-        <section className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
-          <div className="px-6 py-4 border-b border-slate-700/80 flex items-center justify-between">
+        <section className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
+          <div className="px-6 py-4 border-b border-blue-800/45 flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-white">Usuarios del sistema</h2>
               <p className="text-slate-400 text-sm mt-0.5">Correo, contraseña, nombre, teléfono y permisos sobre el punto de venta</p>
@@ -176,7 +176,7 @@ export default function ConfiguracionPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-slate-700 bg-slate-800">
+                  <tr className="border-b border-blue-800/40 bg-blue-950/20 backdrop-blur-sm">
                     <th className="text-left text-slate-400 font-semibold px-6 py-4">Nombre</th>
                     <th className="text-left text-slate-400 font-semibold px-6 py-4">Correo</th>
                     <th className="text-left text-slate-400 font-semibold px-6 py-4">Teléfono</th>
@@ -187,7 +187,7 @@ export default function ConfiguracionPage() {
                 </thead>
                 <tbody>
                   {usuarios.map((u) => (
-                    <tr key={u.id} className="border-b border-slate-700/50 hover:bg-slate-700/20">
+                    <tr key={u.id} className="border-b border-blue-900/35 hover:bg-blue-900/25">
                       <td className="px-6 py-3 text-white font-medium">{u.nombre || '—'}</td>
                       <td className="px-6 py-3 text-slate-300">{u.email}</td>
                       <td className="px-6 py-3 text-slate-400">{u.telefono || '—'}</td>
@@ -220,8 +220,8 @@ export default function ConfiguracionPage() {
       {/* Modal usuario */}
       {modalUsuario && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={cerrarModal}>
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-elevated-lg w-full max-w-md max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="px-6 py-4 border-b border-slate-700">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-elevated-lg w-full max-w-md max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-blue-800/40">
               <h2 className="text-lg font-semibold text-white">{editingId ? 'Editar usuario' : 'Agregar usuario'}</h2>
             </div>
             <form onSubmit={guardarUsuario} className="p-6 space-y-4">
@@ -231,7 +231,7 @@ export default function ConfiguracionPage() {
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                   required
                 />
               </div>
@@ -243,7 +243,7 @@ export default function ConfiguracionPage() {
                   type="password"
                   value={form.password}
                   onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                   placeholder={editingId ? '••••••••' : ''}
                   required={!editingId}
                 />
@@ -254,7 +254,7 @@ export default function ConfiguracionPage() {
                   type="text"
                   value={form.nombre}
                   onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                 />
               </div>
               <div>
@@ -263,7 +263,7 @@ export default function ConfiguracionPage() {
                   type="tel"
                   value={form.telefono}
                   onChange={(e) => setForm((f) => ({ ...f, telefono: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                 />
               </div>
               <div>
@@ -271,7 +271,7 @@ export default function ConfiguracionPage() {
                 <select
                   value={form.rol}
                   onChange={(e) => setForm((f) => ({ ...f, rol: e.target.value as 'trabajador' | 'bodega' }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                 >
                   <option value="trabajador">Trabajador (tienda)</option>
                   <option value="bodega">Bodega</option>

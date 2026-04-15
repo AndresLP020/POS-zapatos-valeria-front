@@ -6,6 +6,7 @@ import { AdminModeProvider, useAdminMode } from '@/contexts/AdminModeContext';
 import { Sidebar, MobileHeaderTitle } from '@/components/Sidebar';
 import { GridScan } from '@/components/GridScan';
 import { useRouter, usePathname } from 'next/navigation';
+import { attachMayusculaInicialPosMain } from '@/lib/mayuscula-inicial-dom';
 
 const RUTAS_SOLO_ADMIN = [
   '/pos/gastos-admin',
@@ -97,6 +98,13 @@ export default function POSLayout({
     };
   }, []);
 
+  /** Mayúscula inicial al salir de campos de texto (excepto dinero, correo, contraseña, búsqueda, códigos, tel.). */
+  useEffect(() => {
+    const root = document.querySelector<HTMLElement>('.pos-main-inner');
+    if (!root) return undefined;
+    return attachMayusculaInicialPosMain(root);
+  }, []);
+
   return (
     <ThemeProvider>
       <AdminModeProvider>
@@ -130,7 +138,7 @@ export default function POSLayout({
             <Sidebar open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
             <main className="min-w-0 flex-1 flex flex-col overflow-auto">
               {/* Barra móvil: menú hamburguesa + título */}
-              <header className="sticky top-0 z-[60] flex md:hidden items-center gap-3 px-3 py-3 bg-blue-950/90 border-b border-blue-900/60 safe-area-inset-top shrink-0 backdrop-blur-md">
+              <header className="sticky top-0 z-[60] flex md:hidden items-center gap-3 px-3 py-3 bg-blue-950/45 border-b border-blue-900/50 safe-area-inset-top shrink-0 backdrop-blur-md">
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(true)}

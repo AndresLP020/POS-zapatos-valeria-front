@@ -482,7 +482,7 @@ function VentasPageContent() {
   return (
     <div className="flex flex-col h-full text-white">
       {/* Header con pestañas */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
           <h1 className="text-2xl font-bold text-white">Ventas</h1>
           <div className="flex rounded-lg bg-slate-700/80 p-1">
@@ -509,7 +509,7 @@ function VentasPageContent() {
       {vista === 'ventas' && (
         <>
       {/* Filtros y controles */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30 space-y-4">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm space-y-4">
         {/* Filtros de fecha */}
         <div className="flex flex-wrap items-center gap-3">
           <span className="text-slate-300 text-sm font-medium">Filtrar por fecha:</span>
@@ -536,7 +536,7 @@ function VentasPageContent() {
 
         {/* Rango de fechas personalizado */}
         {filtroFecha === 'personalizado' && (
-          <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-700">
+          <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-blue-800/40">
             <div className="flex items-center gap-2">
               <label className="text-slate-300 text-sm">Desde:</label>
               <input
@@ -544,7 +544,7 @@ function VentasPageContent() {
                 value={fechaInicio}
                 onChange={(e) => setFechaInicio(e.target.value)}
                 max={fechaFin || hoy}
-                className="px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="px-3 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -555,14 +555,14 @@ function VentasPageContent() {
                 onChange={(e) => setFechaFin(e.target.value)}
                 min={fechaInicio}
                 max={hoy}
-                className="px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="px-3 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
           </div>
         )}
 
         {/* Búsqueda y ordenamiento */}
-        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-700">
+        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-blue-800/40">
           <div className="flex-1 min-w-[250px]">
             <div className="relative">
               <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -573,7 +573,7 @@ function VentasPageContent() {
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 placeholder="Buscar por número, cliente, trabajador o producto..."
-                className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
           </div>
@@ -582,7 +582,7 @@ function VentasPageContent() {
             <select
               value={filtroTrabajador}
               onChange={(e) => setFiltroTrabajador(e.target.value)}
-              className="px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500 min-w-[180px]"
+              className="px-3 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500 min-w-[180px]"
             >
               <option value="todos">Todos</option>
               {trabajadoresUnicos.map((t) => (
@@ -597,7 +597,7 @@ function VentasPageContent() {
             <select
               value={ordenarPor}
               onChange={(e) => setOrdenarPor(e.target.value as 'fecha' | 'total')}
-              className="px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="px-3 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <option value="fecha">Fecha</option>
               <option value="total">Total</option>
@@ -620,21 +620,21 @@ function VentasPageContent() {
       </div>
 
       {/* Estadísticas */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+          <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-4 border border-blue-800/40">
             <p className="text-slate-400 text-sm mb-1">Total de Ventas</p>
             <p className="text-2xl font-bold text-white">{formatearCantidad(estadisticas.cantidad)}</p>
           </div>
-          <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+          <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-4 border border-blue-800/40">
             <p className="text-slate-400 text-sm mb-1">Monto Total</p>
             <p className="text-2xl font-bold text-green-400">${formatearMoneda(estadisticas.total)}</p>
           </div>
-          <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+          <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-4 border border-blue-800/40">
             <p className="text-slate-400 text-sm mb-1">Promedio por Venta</p>
             <p className="text-2xl font-bold text-white">${formatearMoneda(estadisticas.promedio)}</p>
           </div>
-          <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+          <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-4 border border-blue-800/40">
             <p className="text-slate-400 text-sm mb-1">Productos Vendidos</p>
             <p className="text-2xl font-bold text-white">{formatearCantidad(estadisticas.itemsTotal)}</p>
           </div>
@@ -662,7 +662,7 @@ function VentasPageContent() {
               return (
                 <div
                   key={venta.id}
-                  className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden hover:border-slate-600 transition"
+                  className="bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 overflow-hidden hover:border-blue-700/50 transition"
                 >
                   <div
                     className="p-4 cursor-pointer"
@@ -720,7 +720,7 @@ function VentasPageContent() {
 
                   {/* Detalles expandidos */}
                   {estaExpandida && (
-                    <div className="border-t border-slate-700 bg-slate-900/50 p-4">
+                    <div className="border-t border-blue-800/40 bg-blue-950/45 backdrop-blur-sm p-4">
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="text-sm font-semibold text-slate-300">Productos vendidos:</h4>
                         <button
@@ -736,7 +736,7 @@ function VentasPageContent() {
                       </div>
                       <div className="space-y-2">
                         {venta.items?.map((item, idx) => (
-                          <div key={idx} className="flex items-center justify-between py-2 px-3 rounded-lg bg-slate-800/50">
+                          <div key={idx} className="flex items-center justify-between py-2 px-3 rounded-lg bg-blue-950/45 backdrop-blur-sm">
                             <div className="flex-1">
                               <p className="text-white font-medium">{item.nombre}</p>
                               <p className="text-sm text-slate-400">
@@ -749,7 +749,7 @@ function VentasPageContent() {
                           </div>
                         ))}
                       </div>
-                      <div className="mt-4 pt-4 border-t border-slate-700 flex justify-between items-center">
+                      <div className="mt-4 pt-4 border-t border-blue-800/40 flex justify-between items-center">
                         <span className="text-slate-400 text-sm">Total de la venta:</span>
                         <span className="text-xl font-bold text-green-400">${formatearMoneda(venta.total ?? 0)}</span>
                       </div>
@@ -777,12 +777,12 @@ function VentasPageContent() {
               Nueva devolución
             </button>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-700 overflow-hidden">
-            <h2 className="text-slate-200 font-semibold px-4 py-3 border-b border-slate-700">Historial de devoluciones</h2>
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/40 overflow-hidden">
+            <h2 className="text-slate-200 font-semibold px-4 py-3 border-b border-blue-800/40">Historial de devoluciones</h2>
             {devoluciones.length === 0 ? (
               <div className="p-8 text-center text-slate-500">No hay devoluciones registradas.</div>
             ) : (
-              <ul className="divide-y divide-slate-700">
+              <ul className="divide-y divide-blue-900/40">
                 {devoluciones.map((d) => (
                   <li key={d.id} className="p-4">
                     <div className="flex justify-between items-start">
@@ -809,15 +809,15 @@ function VentasPageContent() {
 
       {vista === 'perdidas' && (
         <div className="flex-1 overflow-auto p-6">
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-700 overflow-hidden">
-            <h2 className="text-slate-200 font-semibold px-4 py-3 border-b border-slate-700">Pérdidas (productos devueltos no revendibles)</h2>
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/40 overflow-hidden">
+            <h2 className="text-slate-200 font-semibold px-4 py-3 border-b border-blue-800/40">Pérdidas (productos devueltos no revendibles)</h2>
             {perdidas.length === 0 ? (
               <div className="p-8 text-center text-slate-500">No hay pérdidas registradas.</div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-slate-700 bg-slate-800 text-left">
+                    <tr className="border-b border-blue-800/40 bg-blue-950/20 backdrop-blur-sm text-left">
                       <th className="text-slate-400 font-semibold text-sm px-4 py-3">Fecha</th>
                       <th className="text-slate-400 font-semibold text-sm px-4 py-3">Venta</th>
                       <th className="text-slate-400 font-semibold text-sm px-4 py-3">Producto</th>
@@ -827,7 +827,7 @@ function VentasPageContent() {
                   </thead>
                   <tbody>
                     {perdidas.map((p, idx) => (
-                      <tr key={idx} className="border-b border-slate-700/50 hover:bg-slate-700/30">
+                      <tr key={idx} className="border-b border-blue-900/35 hover:bg-blue-900/30">
                         <td className="px-4 py-3 text-slate-300 text-sm">{formatearFecha(p.fecha)}</td>
                         <td className="px-4 py-3 text-slate-300">#{p.ventaId}</td>
                         <td className="px-4 py-3 text-white">{p.nombre}</td>
@@ -840,7 +840,7 @@ function VentasPageContent() {
               </div>
             )}
             {perdidas.length > 0 && (
-              <div className="px-4 py-3 border-t border-slate-700 flex justify-end">
+              <div className="px-4 py-3 border-t border-blue-800/40 flex justify-end">
                 <span className="text-slate-400 text-sm">
                   Total pérdidas: <span className="font-bold text-red-400">${formatearMoneda(perdidas.reduce((s, p) => s + p.valorPerdida, 0))}</span>
                 </span>
@@ -853,12 +853,12 @@ function VentasPageContent() {
       {/* Modal Nueva devolución */}
       {modalDevolucion && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => !enviandoDevolucion && setModalDevolucion(null)}>
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
-            <div className="px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="px-4 py-3 border-b border-blue-800/40 flex justify-between items-center">
               <h2 className="text-lg font-semibold text-white">Nueva devolución</h2>
               <button onClick={() => !enviandoDevolucion && setModalDevolucion(null)} className="p-1 text-slate-400 hover:text-white">×</button>
             </div>
-            <div className="p-4 border-b border-slate-700">
+            <div className="p-4 border-b border-blue-800/40">
               <label className="block text-slate-400 text-sm mb-2">Venta de referencia (opcional)</label>
               <select
                 value={modalDevolucion.ventaId ?? ''}
@@ -866,7 +866,7 @@ function VentasPageContent() {
                   const val = e.target.value;
                   setModalDevolucion((prev) => (prev ? { ...prev, ventaId: val === '' ? null : Number(val) } : null));
                 }}
-                className="w-full rounded-xl bg-slate-700 border border-slate-600 text-white px-4 py-2"
+                className="w-full rounded-xl bg-slate-700 border border-blue-800/40 text-white px-4 py-2"
               >
                 <option value="">Ninguna</option>
                 {ventas.map((v) => (
@@ -880,7 +880,7 @@ function VentasPageContent() {
               <p className="text-slate-400 text-sm mb-3">Todos los productos. Indica cantidad a devolver y si se puede revender o es pérdida.</p>
               <div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
                 {modalDevolucion.items.map((it, idx) => (
-                  <div key={it.productoId} className="p-3 rounded-xl bg-slate-700/50 border border-slate-600 space-y-2">
+                  <div key={it.productoId} className="p-3 rounded-xl bg-slate-700/50 border border-blue-800/40 space-y-2">
                     <p className="font-medium text-white">{it.nombre}</p>
                     <div className="flex flex-wrap items-center gap-3">
                       <div className="flex items-center gap-2">
@@ -890,7 +890,7 @@ function VentasPageContent() {
                           min={0}
                           value={it.cantidadDevolver || ''}
                           onChange={(e) => actualizarItemDevolucion(idx, { cantidadDevolver: Math.max(0, Number(e.target.value) || 0) })}
-                          className="w-20 rounded-lg bg-slate-700 border border-slate-600 text-white px-2 py-1 text-sm"
+                          className="w-20 rounded-lg bg-slate-700 border border-blue-800/40 text-white px-2 py-1 text-sm"
                         />
                         <span className="text-slate-500 text-sm">Stock actual: {it.cantidadVendida}</span>
                       </div>
@@ -922,7 +922,7 @@ function VentasPageContent() {
                 ))}
               </div>
             </div>
-            <div className="p-4 border-t border-slate-700 flex gap-3 justify-end">
+            <div className="p-4 border-t border-blue-800/40 flex gap-3 justify-end">
               <button type="button" onClick={() => !enviandoDevolucion && setModalDevolucion(null)} className="px-4 py-2 rounded-xl bg-slate-700 text-slate-300 hover:bg-slate-600">
                 Cancelar
               </button>
@@ -937,20 +937,20 @@ function VentasPageContent() {
       {/* Modal Editar ticket */}
       {modalEditarVenta && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => !enviandoEditar && setModalEditarVenta(null)}>
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
-            <div className="px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="px-4 py-3 border-b border-blue-800/40 flex justify-between items-center">
               <h2 className="text-lg font-semibold text-white">Editar ticket #{modalEditarVenta.venta.id}</h2>
               <button type="button" onClick={() => !enviandoEditar && setModalEditarVenta(null)} className="p-1 text-slate-400 hover:text-white">×</button>
             </div>
             <div className="p-4 flex-1 overflow-auto space-y-4">
               <p className="text-slate-400 text-sm">Modifica precio, cantidad, agrega o quita productos. El total y las ganancias se actualizarán al guardar.</p>
               {/* Resumen de pago y deuda */}
-              <div className="rounded-xl bg-slate-700/50 border border-slate-600 p-4 space-y-2">
+              <div className="rounded-xl bg-slate-700/50 border border-blue-800/40 p-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400">Pagado anteriormente por el cliente:</span>
                   <span className="text-emerald-400 font-semibold">${formatearMoneda(modalEditarVenta.venta.pagado ?? 0)}</span>
                 </div>
-                <div className="flex justify-between text-sm pt-2 border-t border-slate-600">
+                <div className="flex justify-between text-sm pt-2 border-t border-blue-800/40">
                   <span className="text-slate-400">Nuevo total del ticket:</span>
                   <span className="text-white font-semibold">${formatearMoneda(modalEditarVenta.items.reduce((s, i) => s + i.precio * i.cantidad, 0))}</span>
                 </div>
@@ -961,7 +961,7 @@ function VentasPageContent() {
                   const clienteDebe = Math.max(0, nuevoTotal - pagado);
                   if (seLeDebeAlCliente > 0) {
                     return (
-                      <div className="flex justify-between text-sm pt-2 border-t border-slate-600">
+                      <div className="flex justify-between text-sm pt-2 border-t border-blue-800/40">
                         <span className="text-blue-400">Se le debe al cliente:</span>
                         <span className="text-blue-400 font-bold">${formatearMoneda(seLeDebeAlCliente)}</span>
                       </div>
@@ -969,14 +969,14 @@ function VentasPageContent() {
                   }
                   if (clienteDebe > 0) {
                     return (
-                      <div className="flex justify-between text-sm pt-2 border-t border-slate-600">
+                      <div className="flex justify-between text-sm pt-2 border-t border-blue-800/40">
                         <span className="text-amber-400">El cliente nos debe:</span>
                         <span className="text-amber-400 font-bold">${formatearMoneda(clienteDebe)}</span>
                       </div>
                     );
                   }
                   return (
-                    <div className="text-sm pt-2 border-t border-slate-600 text-emerald-400 font-medium">
+                    <div className="text-sm pt-2 border-t border-blue-800/40 text-emerald-400 font-medium">
                       Cuenta saldada
                     </div>
                   );
@@ -985,7 +985,7 @@ function VentasPageContent() {
               <div className="space-y-3">
                 <h3 className="text-sm font-medium text-slate-300">Productos en el ticket</h3>
                 {modalEditarVenta.items.map((item, idx) => (
-                  <div key={`${item.id}-${idx}`} className="flex flex-wrap items-center gap-3 p-3 rounded-xl bg-slate-700/50 border border-slate-600">
+                  <div key={`${item.id}-${idx}`} className="flex flex-wrap items-center gap-3 p-3 rounded-xl bg-slate-700/50 border border-blue-800/40">
                     <div className="flex-1 min-w-[140px]">
                       <p className="text-white font-medium text-sm">{item.nombre}</p>
                     </div>
@@ -997,7 +997,7 @@ function VentasPageContent() {
                         step={0.01}
                         value={item.precio}
                         onChange={(e) => actualizarItemEditar(idx, { precio: Math.max(0, Number(e.target.value) || 0) })}
-                        className="w-20 rounded-lg bg-slate-700 border border-slate-600 text-white px-2 py-1.5 text-sm"
+                        className="w-20 rounded-lg bg-slate-700 border border-blue-800/40 text-white px-2 py-1.5 text-sm"
                       />
                     </div>
                     <div className="flex items-center gap-2">
@@ -1007,7 +1007,7 @@ function VentasPageContent() {
                         min={1}
                         value={item.cantidad}
                         onChange={(e) => actualizarItemEditar(idx, { cantidad: Math.max(1, Math.floor(Number(e.target.value) || 1)) })}
-                        className="w-16 rounded-lg bg-slate-700 border border-slate-600 text-white px-2 py-1.5 text-sm"
+                        className="w-16 rounded-lg bg-slate-700 border border-blue-800/40 text-white px-2 py-1.5 text-sm"
                       />
                     </div>
                     <span className="text-slate-300 text-sm tabular-nums">= ${formatearMoneda(item.precio * item.cantidad)}</span>
@@ -1019,7 +1019,7 @@ function VentasPageContent() {
                   </div>
                 ))}
               </div>
-              <div className="pt-2 border-t border-slate-700">
+              <div className="pt-2 border-t border-blue-800/40">
                 <h3 className="text-sm font-medium text-slate-300 mb-2">Agregar producto al ticket</h3>
                 <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
                   {productosParaAgregar.map((p) => (
@@ -1027,21 +1027,21 @@ function VentasPageContent() {
                       key={p.id}
                       type="button"
                       onClick={() => agregarProductoATicket(p)}
-                      className="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm border border-slate-600"
+                      className="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm border border-blue-800/40"
                     >
                       {p.nombre} — ${formatearMoneda(p.precio)} (stock: {p.stock ?? 0})
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="pt-4 border-t border-slate-700 flex justify-between items-center">
+              <div className="pt-4 border-t border-blue-800/40 flex justify-between items-center">
                 <span className="text-slate-400">Nuevo total:</span>
                 <span className="text-xl font-bold text-green-400">
                   ${formatearMoneda(modalEditarVenta.items.reduce((s, i) => s + i.precio * i.cantidad, 0))}
                 </span>
               </div>
             </div>
-            <div className="p-4 border-t border-slate-700 flex gap-3 justify-end">
+            <div className="p-4 border-t border-blue-800/40 flex gap-3 justify-end">
               <button type="button" onClick={() => !enviandoEditar && setModalEditarVenta(null)} className="px-4 py-2 rounded-xl bg-slate-700 text-slate-300 hover:bg-slate-600">
                 Cancelar
               </button>

@@ -16,3 +16,10 @@ export function formatearCantidad(n: number, decimals = 0): string {
     maximumFractionDigits: decimals,
   });
 }
+
+/** Primera letra en mayúsculas (locale es); el resto se deja igual. Ej.: "nike air" → "Nike air". */
+export function capitalizarPrimeraLetra(texto: string): string {
+  const t = texto.trim();
+  if (!t) return '';
+  return t.charAt(0).toLocaleUpperCase('es') + t.slice(1);
+}

@@ -325,7 +325,7 @@ export default function ReportesPage() {
   return (
     <div className="flex flex-col h-full text-white">
       {/* Header */}
-      <header className="sticky top-0 z-10 flex flex-wrap items-start justify-between gap-4 px-6 py-4 border-b border-slate-700/80 bg-slate-900/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 flex flex-wrap items-start justify-between gap-4 px-6 py-4 border-b border-blue-800/45 bg-blue-950/75 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
             <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -368,7 +368,7 @@ export default function ReportesPage() {
       </header>
 
       {/* Filtros de período */}
-      <div className="px-6 py-4 border-b border-slate-700/80 bg-slate-800/30">
+      <div className="px-6 py-4 border-b border-blue-800/45 bg-blue-950/35 backdrop-blur-sm">
         <div className="flex flex-wrap items-center gap-2">
           {(['hoy', 'semana', 'mes', 'año', 'personalizado'] as FiltroPeriodo[]).map((periodo) => (
             <button
@@ -383,7 +383,7 @@ export default function ReportesPage() {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition ${
                 filtroPeriodo === periodo
                   ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                  : 'bg-slate-700/80 text-slate-300 hover:bg-slate-600 hover:text-white border border-slate-600/50'
+                  : 'bg-slate-700/80 text-slate-300 hover:bg-slate-600 hover:text-white border border-blue-800/40/50'
               }`}
             >
               {periodo === 'hoy' && (
@@ -413,7 +413,7 @@ export default function ReportesPage() {
 
         {/* Rango personalizado */}
         {filtroPeriodo === 'personalizado' && (
-          <div className="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-slate-700/80">
+          <div className="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-blue-800/45">
             <div className="flex items-center gap-2">
               <label className="text-slate-400 text-sm font-medium">Desde</label>
               <input
@@ -421,7 +421,7 @@ export default function ReportesPage() {
                 value={fechaInicio}
                 onChange={(e) => setFechaInicio(e.target.value)}
                 max={fechaFin || hoy}
-                className="px-3 py-2 rounded-xl bg-slate-700/80 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="px-3 py-2 rounded-xl bg-slate-700/80 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -432,7 +432,7 @@ export default function ReportesPage() {
                 onChange={(e) => setFechaFin(e.target.value)}
                 min={fechaInicio}
                 max={hoy}
-                className="px-3 py-2 rounded-xl bg-slate-700/80 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="px-3 py-2 rounded-xl bg-slate-700/80 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
           </div>
@@ -447,7 +447,7 @@ export default function ReportesPage() {
             <p className="text-slate-400 mt-4 text-sm font-medium">Cargando reportes…</p>
           </div>
         ) : !hayDatos ? (
-          <div className="rounded-2xl bg-slate-800/60 border border-slate-700/80 p-12 text-center">
+          <div className="rounded-2xl bg-blue-950/50 backdrop-blur-md border border-blue-800/45 p-12 text-center">
             <div className="w-16 h-16 mx-auto rounded-2xl bg-slate-700/80 flex items-center justify-center mb-4">
               <svg className="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -472,7 +472,7 @@ export default function ReportesPage() {
         ) : (
         <>
         {/* Resumen ejecutivo */}
-        <div className="rounded-2xl bg-gradient-to-r from-emerald-500/10 to-slate-800/80 border border-emerald-500/20 p-5 mb-6">
+        <div className="rounded-2xl bg-gradient-to-r from-emerald-500/10 to-blue-950/55 border border-emerald-500/20 p-5 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-sm font-semibold text-emerald-400/90 uppercase tracking-wider mb-1">Resumen ejecutivo</h2>
@@ -493,7 +493,7 @@ export default function ReportesPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
           {/* Total Ventas */}
-          <div className="bg-slate-800/80 rounded-2xl p-5 border border-slate-700/80 shadow-elevated hover:border-slate-600/80 transition">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-5 border border-blue-800/45 shadow-elevated hover:border-blue-700/55 transition">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -507,7 +507,7 @@ export default function ReportesPage() {
           </div>
 
           {/* Ingresos Totales */}
-          <div className="bg-slate-800/80 rounded-2xl p-5 border border-slate-700/80 shadow-elevated hover:border-slate-600/80 transition">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-5 border border-blue-800/45 shadow-elevated hover:border-blue-700/55 transition">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -521,7 +521,7 @@ export default function ReportesPage() {
           </div>
 
           {/* Costo de Productos */}
-          <div className="bg-slate-800/80 rounded-2xl p-5 border border-slate-700/80 shadow-elevated hover:border-slate-600/80 transition">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-5 border border-blue-800/45 shadow-elevated hover:border-blue-700/55 transition">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -535,7 +535,7 @@ export default function ReportesPage() {
           </div>
 
           {/* Ganancia Bruta */}
-          <div className="bg-slate-800/80 rounded-2xl p-5 border border-slate-700/80 shadow-elevated hover:border-slate-600/80 transition">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-5 border border-blue-800/45 shadow-elevated hover:border-blue-700/55 transition">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -549,7 +549,7 @@ export default function ReportesPage() {
           </div>
 
           {/* Ganancia Neta */}
-          <div className="bg-slate-800/80 rounded-2xl p-5 border border-slate-700/80 shadow-elevated hover:border-slate-600/80 transition">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-5 border border-blue-800/45 shadow-elevated hover:border-blue-700/55 transition">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -565,7 +565,7 @@ export default function ReportesPage() {
           </div>
 
           {/* Venta Promedio */}
-          <div className="bg-slate-800/80 rounded-2xl p-5 border border-slate-700/80 shadow-elevated hover:border-slate-600/80 transition">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-5 border border-blue-800/45 shadow-elevated hover:border-blue-700/55 transition">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -581,8 +581,8 @@ export default function ReportesPage() {
 
         {/* Ventas del período + Productos más vendidos */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
-            <div className="px-5 py-4 border-b border-slate-700/80 flex items-center justify-between">
+          <div className="rounded-2xl bg-blue-950/40 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
+            <div className="px-5 py-4 border-b border-blue-800/45 flex items-center justify-between">
               <h2 className="text-base font-semibold text-white">Ventas del período</h2>
               <Link href="/pos/ventas" className="text-emerald-400 hover:text-emerald-300 text-sm font-medium">
                 Ver todas →
@@ -594,7 +594,7 @@ export default function ReportesPage() {
               ) : (
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-slate-400 border-b border-slate-700/80">
+                    <tr className="text-slate-400 border-b border-blue-800/45">
                       <th className="text-left py-3 px-4 font-medium">#</th>
                       <th className="text-left py-3 px-4 font-medium">Fecha</th>
                       <th className="text-right py-3 px-4 font-medium">Total</th>
@@ -602,7 +602,7 @@ export default function ReportesPage() {
                   </thead>
                   <tbody>
                     {ventasRecientesPeriodo.map((v) => (
-                      <tr key={v.id} className="border-b border-slate-700/50 hover:bg-slate-700/20">
+                      <tr key={v.id} className="border-b border-blue-900/35 hover:bg-blue-900/25">
                         <td className="py-2.5 px-4 text-slate-300">{v.id}</td>
                         <td className="py-2.5 px-4 text-slate-400">{formatearFechaCorta(v.fecha)}</td>
                         <td className="py-2.5 px-4 text-right font-medium text-emerald-400 tabular-nums">${formatearMoneda(v.pagado ?? v.total)}</td>
@@ -613,8 +613,8 @@ export default function ReportesPage() {
               )}
             </div>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
-            <div className="px-5 py-4 border-b border-slate-700/80">
+          <div className="rounded-2xl bg-blue-950/40 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
+            <div className="px-5 py-4 border-b border-blue-800/45">
               <h2 className="text-base font-semibold text-white">Productos más vendidos</h2>
               <p className="text-slate-400 text-xs mt-0.5">En el período seleccionado</p>
             </div>
@@ -622,9 +622,9 @@ export default function ReportesPage() {
               {productosMasVendidosPeriodo.length === 0 ? (
                 <p className="p-5 text-slate-500 text-sm">Sin datos de productos vendidos.</p>
               ) : (
-                <ul className="divide-y divide-slate-700/50">
+                <ul className="divide-y divide-blue-900/35">
                   {productosMasVendidosPeriodo.map((p, i) => (
-                    <li key={p.id} className="flex items-center justify-between py-3 px-4 hover:bg-slate-700/20">
+                    <li key={p.id} className="flex items-center justify-between py-3 px-4 hover:bg-blue-900/25">
                       <div className="flex items-center gap-3">
                         <span className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">
                           {i + 1}
@@ -644,7 +644,7 @@ export default function ReportesPage() {
         </div>
 
         {/* Resumen Financiero */}
-        <div className="border-t border-slate-700/80 pt-6 mt-2">
+        <div className="border-t border-blue-800/45 pt-6 mt-2">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -657,7 +657,7 @@ export default function ReportesPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Productos vendidos */}
-            <div className="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80 shadow-elevated">
+            <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-4 border border-blue-800/45 shadow-elevated">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -670,7 +670,7 @@ export default function ReportesPage() {
             </div>
 
             {/* Margen de ganancia */}
-            <div className="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80 shadow-elevated">
+            <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-4 border border-blue-800/45 shadow-elevated">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -683,7 +683,7 @@ export default function ReportesPage() {
             </div>
 
             {/* Costo promedio */}
-            <div className="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80 shadow-elevated">
+            <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-4 border border-blue-800/45 shadow-elevated">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -696,7 +696,7 @@ export default function ReportesPage() {
             </div>
 
             {/* Ganancia por venta */}
-            <div className="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80 shadow-elevated">
+            <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl p-4 border border-blue-800/45 shadow-elevated">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -712,8 +712,8 @@ export default function ReportesPage() {
 
         {/* Desempeño de trabajadores y flujo de bodega */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
-            <div className="px-5 py-4 border-b border-slate-700/80">
+          <div className="rounded-2xl bg-blue-950/40 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
+            <div className="px-5 py-4 border-b border-blue-800/45">
               <h2 className="text-base font-semibold text-white">Comparativa de trabajadores</h2>
               <p className="text-slate-400 text-xs mt-0.5">Quién vende más y quién tiene más actividad en el sistema</p>
             </div>
@@ -725,7 +725,7 @@ export default function ReportesPage() {
                 ) : (
                   <div className="space-y-2">
                     {rankingVendedores.slice(0, 8).map((r, i) => (
-                      <div key={`${r.nombre}-${i}`} className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-900/40 px-3 py-2">
+                      <div key={`${r.nombre}-${i}`} className="flex items-center justify-between rounded-xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm px-3 py-2">
                         <div>
                           <p className="text-sm text-white font-medium">{r.nombre}</p>
                           <p className="text-xs text-slate-400">{r.ventas} ventas · {r.unidades} unidades</p>
@@ -743,7 +743,7 @@ export default function ReportesPage() {
                 ) : (
                   <div className="space-y-2">
                     {actividadPorTrabajador.slice(0, 10).map((a, i) => (
-                      <div key={`${a.nombre}-${i}`} className="rounded-xl border border-slate-700 bg-slate-900/40 px-3 py-2">
+                      <div key={`${a.nombre}-${i}`} className="rounded-xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm px-3 py-2">
                         <p className="text-sm text-white font-medium">{a.nombre}</p>
                         <p className="text-xs text-slate-400">
                           Eventos: {a.eventos} · Ventas: {a.ventas} · Bodega: {a.transferencias} · Altas usuario: {a.usuarios}
@@ -756,8 +756,8 @@ export default function ReportesPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
-            <div className="px-5 py-4 border-b border-slate-700/80">
+          <div className="rounded-2xl bg-blue-950/40 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
+            <div className="px-5 py-4 border-b border-blue-800/45">
               <h2 className="text-base font-semibold text-white">Flujo bodega y tienda</h2>
               <p className="text-slate-400 text-xs mt-0.5">Quién pide, quién autoriza y quién recibe transferencias</p>
             </div>
@@ -767,7 +767,7 @@ export default function ReportesPage() {
                 { title: 'Quién autoriza', list: flujoBodega.autoriza },
                 { title: 'Quién recibe', list: flujoBodega.recibe },
               ] as const).map((bloque) => (
-                <div key={bloque.title} className="rounded-xl border border-slate-700 bg-slate-900/40 p-3">
+                <div key={bloque.title} className="rounded-xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-3">
                   <p className="text-xs uppercase tracking-wide text-slate-400 mb-2">{bloque.title}</p>
                   {bloque.list.length === 0 ? (
                     <p className="text-slate-500 text-xs">Sin datos</p>
@@ -787,7 +787,7 @@ export default function ReportesPage() {
           </div>
         </div>
 
-        <p className="mt-8 pt-6 border-t border-slate-700/80 text-center text-slate-500 text-xs">
+        <p className="mt-8 pt-6 border-t border-blue-800/45 text-center text-slate-500 text-xs">
           Reporte generado el {new Date().toLocaleString('es-MX', { dateStyle: 'long', timeStyle: 'short' })} · POS Calzado
         </p>
         </>

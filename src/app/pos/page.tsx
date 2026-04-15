@@ -335,7 +335,7 @@ export default function POSPage() {
   return (
     <div className="flex flex-col h-full text-white">
       {/* Header con estadísticas */}
-      <div className="px-4 sm:px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+      <div className="px-4 sm:px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0">
             <h1 className="text-lg sm:text-xl font-bold text-white truncate">Nueva Venta</h1>
@@ -360,7 +360,7 @@ export default function POSPage() {
         {/* Columna central */}
         <div className="flex-1 flex flex-col p-4 sm:p-6 space-y-5 sm:space-y-6 overflow-auto min-h-0">
           {/* Escáner de código de barras */}
-          <div className="bg-slate-800/50 rounded-xl p-4 sm:p-5 border border-slate-700">
+          <div className="bg-blue-950/45 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-blue-800/40">
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
@@ -382,7 +382,7 @@ export default function POSPage() {
                   }
                 }}
                 placeholder="Escanea o ingresa el código"
-                className="flex-1 min-w-0 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-base sm:text-lg"
+                className="flex-1 min-w-0 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-slate-700 border border-blue-800/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-base sm:text-lg"
                 autoFocus
               />
               <button
@@ -395,7 +395,7 @@ export default function POSPage() {
           </div>
 
           {/* Buscar productos */}
-          <div className="bg-slate-800/50 rounded-xl p-4 sm:p-5 border border-slate-700">
+          <div className="bg-blue-950/45 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-blue-800/40">
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <svg className="w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -407,7 +407,7 @@ export default function POSPage() {
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Modelo, marca o código de barras…"
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-base"
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-slate-700 border border-blue-800/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-base"
             />
 
             {/* Resultado de búsqueda */}
@@ -488,7 +488,7 @@ export default function POSPage() {
                       key={p.id}
                       onClick={() => agregarAlCarrito(p)}
                       disabled={p.stock <= 0}
-                      className="text-left p-3 bg-slate-800 rounded-lg border border-slate-700 hover:border-green-500/50 hover:bg-slate-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition touch-manipulation min-h-[72px] sm:min-h-0 active:scale-[0.98]"
+                      className="text-left p-3 bg-blue-950/40 backdrop-blur-md rounded-lg border border-blue-800/40 hover:border-green-500/50 hover:bg-blue-900/45 disabled:opacity-50 disabled:cursor-not-allowed transition touch-manipulation min-h-[72px] sm:min-h-0 active:scale-[0.98]"
                     >
                       <div className="text-xs font-medium text-green-400 mb-1 truncate">{p.categoria}</div>
                       <div className="font-medium text-white text-sm mb-1 truncate">{p.nombre}</div>
@@ -505,9 +505,9 @@ export default function POSPage() {
         </div>
 
         {/* Panel lateral derecho */}
-        <div className="w-full md:w-96 min-h-0 border-t md:border-t-0 md:border-l border-slate-700 bg-slate-800 flex flex-col flex-shrink-0">
+        <div className="w-full md:w-96 min-h-0 border-t md:border-t-0 md:border-l border-blue-800/40 bg-blue-950/40 backdrop-blur-md flex flex-col flex-shrink-0">
           {/* Botón Devoluciones */}
-          <div className="p-3 sm:p-4 border-b border-slate-700">
+          <div className="p-3 sm:p-4 border-b border-blue-800/40">
             <Link
               href="/pos/ventas?vista=devoluciones"
               className="flex w-full items-center justify-center py-3 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium transition text-center touch-manipulation min-h-[44px]"
@@ -517,7 +517,7 @@ export default function POSPage() {
           </div>
 
           {/* Selector de Cliente */}
-          <div className="p-3 sm:p-4 border-b border-slate-700">
+          <div className="p-3 sm:p-4 border-b border-blue-800/40">
             <label className="block text-sm font-medium text-slate-300 mb-2">Cliente</label>
             <select
               value={clienteSeleccionado?.id || ''}
@@ -526,7 +526,7 @@ export default function POSPage() {
                 const cliente = clientes.find((c) => c.id === id) || null;
                 setClienteSeleccionado(cliente);
               }}
-              className="w-full px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <option value="">Cliente general</option>
               {clientes.map((c) => (
@@ -536,7 +536,7 @@ export default function POSPage() {
               ))}
             </select>
             {clienteSeleccionado && (
-              <div className="mt-2 p-2 rounded bg-slate-700/50 border border-slate-600">
+              <div className="mt-2 p-2 rounded bg-slate-700/50 border border-blue-800/40">
                 <p className="text-xs text-slate-400">Cliente seleccionado:</p>
                 <p className="text-sm font-medium text-white">{clienteSeleccionado.nombre}</p>
                 {clienteSeleccionado.telefono && (
@@ -548,7 +548,7 @@ export default function POSPage() {
 
           {/* Venta Actual */}
           <div className="flex-1 flex flex-col min-h-0">
-            <div className="p-3 sm:p-4 border-b border-slate-700">
+            <div className="p-3 sm:p-4 border-b border-blue-800/40">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-white">Venta Actual</h2>
                 {carrito.length > 0 && (
@@ -571,7 +571,7 @@ export default function POSPage() {
               <div className="flex-1 flex flex-col min-h-0 min-w-0">
                 <div className="flex-1 min-h-[200px] overflow-y-auto overflow-x-hidden p-3 sm:p-4 space-y-3">
                   {carrito.map((item, idx) => (
-                    <div key={`${item.producto.id}-${idx}`} className="p-3 rounded-lg bg-slate-700 border border-slate-600">
+                    <div key={`${item.producto.id}-${idx}`} className="p-3 rounded-lg bg-slate-700 border border-blue-800/40">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-white truncate">{item.producto.nombre}</div>
@@ -623,9 +623,9 @@ export default function POSPage() {
                   ))}
                 </div>
 
-                <div className="flex-shrink-0 p-3 sm:p-4 border-t border-slate-700 space-y-3 bg-slate-900/30">
+                <div className="flex-shrink-0 p-3 sm:p-4 border-t border-blue-800/40 space-y-3 bg-blue-950/35 backdrop-blur-sm">
                   {/* Resumen */}
-                  <div className="space-y-2 pb-3 border-b border-slate-700">
+                  <div className="space-y-2 pb-3 border-b border-blue-800/40">
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-400">Items:</span>
                       <span className="text-white font-medium">{estadisticasVenta.totalItems}</span>
@@ -671,7 +671,7 @@ export default function POSPage() {
                           const n = parseMontoPagado();
                           if (n >= 0) setMontoPagado(n > 0 ? formatearMoneda(n) : '');
                         }}
-                        className="w-full pl-6 pr-3 py-2.5 rounded-lg bg-slate-700 border border-slate-600 text-white text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                        className="w-full pl-6 pr-3 py-2.5 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                         placeholder="0.00"
                         onKeyDown={(e) => {
                           if (e.key === 'Enter' && carrito.length > 0) {

@@ -87,7 +87,7 @@ export default function CodigosProductosPage() {
 
   return (
     <div className="flex flex-col h-full text-white max-w-6xl mx-auto w-full">
-      <div className="px-1 sm:px-0 py-2 border-b border-slate-700/80 mb-4">
+      <div className="px-1 sm:px-0 py-2 border-b border-blue-800/45 mb-4">
         <h1 className="text-2xl font-bold text-white">Códigos de productos</h1>
         <p className="text-slate-400 text-sm mt-1">
           Vista previa de códigos de barras y PDF de etiquetas para impresión (solo administrador).
@@ -95,15 +95,15 @@ export default function CodigosProductosPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-0">
-        <div className="flex flex-col rounded-2xl border border-slate-700 bg-slate-800/40 overflow-hidden">
-          <div className="p-4 border-b border-slate-700">
+        <div className="flex flex-col rounded-2xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm overflow-hidden">
+          <div className="p-4 border-b border-blue-800/40">
             <label className="block text-slate-400 text-xs font-medium mb-1">Buscar</label>
             <input
               type="search"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Nombre, código o categoría…"
-              className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
             />
           </div>
           <div className="overflow-y-auto flex-1 max-h-[60vh] lg:max-h-[calc(100vh-280px)] p-2 space-y-1">
@@ -120,7 +120,7 @@ export default function CodigosProductosPage() {
                   className={`w-full text-left rounded-xl px-3 py-3 border transition ${
                     seleccionId === p.id
                       ? 'bg-emerald-500/20 border-emerald-500/50 text-white'
-                      : 'bg-slate-800/60 border-slate-700 hover:border-slate-600 text-slate-200'
+                      : 'bg-blue-950/50 backdrop-blur-md border-blue-800/40 hover:border-blue-700/50 text-slate-200'
                   }`}
                 >
                   <div className="font-medium truncate">{p.nombre}</div>
@@ -131,7 +131,7 @@ export default function CodigosProductosPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-700 bg-slate-800/40 p-5 space-y-5">
+        <div className="rounded-2xl border border-blue-800/40 bg-blue-950/40 backdrop-blur-sm p-5 space-y-5">
           {!seleccionado ? (
             <p className="text-slate-500 text-sm">Selecciona un producto de la lista para ver su código y generar el PDF.</p>
           ) : (
@@ -160,7 +160,7 @@ export default function CodigosProductosPage() {
                     step={1}
                     value={anchoMm}
                     onChange={(e) => setAnchoMm(Number(e.target.value) || 50)}
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                   />
                 </div>
                 <div>
@@ -172,7 +172,7 @@ export default function CodigosProductosPage() {
                     step={1}
                     value={altoMm}
                     onChange={(e) => setAltoMm(Number(e.target.value) || 30)}
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-3 py-2 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                   />
                 </div>
               </div>
@@ -186,7 +186,7 @@ export default function CodigosProductosPage() {
                   step={1}
                   value={copias}
                   onChange={(e) => setCopias(Math.max(1, Math.min(500, Number(e.target.value) || 1)))}
-                  className="w-full max-w-[160px] rounded-xl bg-slate-700 border border-slate-600 px-3 py-2 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full max-w-[160px] rounded-xl bg-slate-700 border border-blue-800/40 px-3 py-2 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                 />
                 <p className="text-slate-500 text-xs mt-1">Cada copia es una página del mismo tamaño para imprimir varias etiquetas.</p>
               </div>

@@ -179,7 +179,7 @@ export default function ProveedoresPage() {
 
   return (
     <div className="flex flex-col h-full text-white">
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-white mb-1">Proveedores</h1>
@@ -197,7 +197,7 @@ export default function ProveedoresPage() {
         </div>
       </div>
 
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm">
         <div className="relative max-w-md">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -207,7 +207,7 @@ export default function ProveedoresPage() {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar por nombre, teléfono o email..."
-            className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
       </div>
@@ -229,7 +229,7 @@ export default function ProveedoresPage() {
               const resumen = resumenCuentas[p.id];
               const saldo = resumen?.saldoPendiente ?? 0;
               return (
-                <div key={p.id} className="bg-slate-800 rounded-xl border border-slate-700 p-5 hover:border-slate-600 transition">
+                <div key={p.id} className="bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 p-5 hover:border-blue-700/50 transition">
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <h3 className="font-bold text-white text-lg">{p.nombre}</h3>
@@ -270,7 +270,7 @@ export default function ProveedoresPage() {
                     {p.email && <p>{p.email}</p>}
                     {p.direccion && <p>{p.direccion}</p>}
                   </div>
-                  <div className="mt-4 pt-3 border-t border-slate-700 flex items-center justify-between">
+                  <div className="mt-4 pt-3 border-t border-blue-800/40 flex items-center justify-between">
                     <div>
                       <p className="text-xs text-slate-500">Productos que surte</p>
                       <p className="text-lg font-bold text-green-400">{productosPorProveedor[p.id] ?? 0}</p>
@@ -291,7 +291,7 @@ export default function ProveedoresPage() {
 
       {modalAbierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={cerrarModal}>
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-lg font-semibold text-white mb-4">{editando ? 'Editar proveedor' : 'Nuevo proveedor'}</h2>
             <form onSubmit={guardar} className="space-y-4">
               <div>
@@ -300,17 +300,18 @@ export default function ProveedoresPage() {
                   type="text"
                   value={form.nombre}
                   onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-green-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-green-500 outline-none"
                   required
                 />
               </div>
               <div>
                 <label className="block text-slate-400 text-sm font-medium mb-1">Teléfono</label>
                 <input
-                  type="text"
+                  type="tel"
+                  autoComplete="tel"
                   value={form.telefono}
                   onChange={(e) => setForm((f) => ({ ...f, telefono: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-green-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-green-500 outline-none"
                 />
               </div>
               <div>
@@ -319,7 +320,7 @@ export default function ProveedoresPage() {
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-green-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-green-500 outline-none"
                 />
               </div>
               <div>
@@ -328,7 +329,7 @@ export default function ProveedoresPage() {
                   type="text"
                   value={form.direccion}
                   onChange={(e) => setForm((f) => ({ ...f, direccion: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-green-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-green-500 outline-none"
                 />
               </div>
               <div className="flex gap-3 pt-2">
@@ -347,10 +348,10 @@ export default function ProveedoresPage() {
       {modalCuentaAbierto && proveedorCuenta && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={cerrarCuentaProveedor}>
           <div
-            className="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col"
+            className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-6 py-4 border-b border-slate-700 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-blue-800/40 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-white">Cuenta con proveedor</h2>
                 <p className="text-slate-400 text-sm">{proveedorCuenta.nombre}</p>
@@ -365,7 +366,7 @@ export default function ProveedoresPage() {
               </button>
             </div>
 
-            <div className="px-6 py-3 border-b border-slate-700 bg-slate-900/40 flex items-center gap-6">
+            <div className="px-6 py-3 border-b border-blue-800/40 bg-blue-950/40 backdrop-blur-sm flex items-center gap-6">
               {(() => {
                 const resumen = resumenCuentas[proveedorCuenta.id];
                 const saldo = resumen?.saldoPendiente ?? 0;
@@ -395,7 +396,7 @@ export default function ProveedoresPage() {
             </div>
 
             <div className="flex-1 overflow-auto px-6 py-4 space-y-4">
-              <div className="bg-slate-900/40 border border-slate-700 rounded-xl p-4">
+              <div className="bg-blue-950/40 backdrop-blur-sm border border-blue-800/40 rounded-xl p-4">
                 <h3 className="text-sm font-semibold text-slate-100 mb-3">Registrar movimiento</h3>
                 <form onSubmit={registrarMovimiento} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
                   <div>
@@ -403,7 +404,7 @@ export default function ProveedoresPage() {
                     <select
                       value={tipoMovimiento}
                       onChange={(e) => setTipoMovimiento(e.target.value as 'deuda' | 'pago')}
-                      className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full rounded-lg bg-slate-700 border border-blue-800/40 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none"
                     >
                       <option value="deuda">Registrar deuda</option>
                       <option value="pago">Registrar pago</option>
@@ -440,7 +441,7 @@ export default function ProveedoresPage() {
                         setMontoMovimiento(String(num));
                         setMontoMovimientoDisplay(formatearMoneda(num));
                       }}
-                      className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full rounded-lg bg-slate-700 border border-blue-800/40 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none"
                       required
                     />
                   </div>
@@ -450,7 +451,7 @@ export default function ProveedoresPage() {
                       type="date"
                       value={fechaMovimiento}
                       onChange={(e) => setFechaMovimiento(e.target.value)}
-                      className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full rounded-lg bg-slate-700 border border-blue-800/40 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none"
                     />
                   </div>
                   <div className="md:col-span-1">
@@ -460,7 +461,7 @@ export default function ProveedoresPage() {
                       value={descripcionMovimiento}
                       onChange={(e) => setDescripcionMovimiento(e.target.value)}
                       placeholder="Ej. Factura 123, abono, etc."
-                      className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full rounded-lg bg-slate-700 border border-blue-800/40 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none"
                     />
                   </div>
                   <div className="md:col-span-4 flex justify-end">
@@ -485,7 +486,7 @@ export default function ProveedoresPage() {
                     {movimientos.map((m) => (
                       <div
                         key={m.id}
-                        className="flex items-center justify-between bg-slate-900/60 border border-slate-700 rounded-lg px-3 py-2 text-sm"
+                        className="flex items-center justify-between bg-blue-950/50 backdrop-blur-sm border border-blue-800/40 rounded-lg px-3 py-2 text-sm"
                       >
                         <div>
                           <p className="font-medium text-slate-100">

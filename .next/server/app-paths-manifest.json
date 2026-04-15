@@ -1,7 +1,3 @@
 {
-  "/page": "app/page.js",
-  "/pos/productos/page": "app/pos/productos/page.js",
-  "/pos/page": "app/pos/page.js",
-  "/pos/dashboard/page": "app/pos/dashboard/page.js",
-  "/pos/bodega-tienda/page": "app/pos/bodega-tienda/page.js"
+  "/pos/sueldos/page": "app/pos/sueldos/page.js"
 }

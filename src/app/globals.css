@@ -100,10 +100,36 @@ body[data-pos-shell='1'] {
 .theme-light .pos-layout .bg-slate-900 {
   background-color: rgb(203 213 225) !important;
 }
+/* Paneles POS (tonalidad azulada, mismo criterio que el dashboard) */
+.theme-light .pos-layout .bg-blue-950\/90,
+.theme-light .pos-layout .bg-blue-950\/75,
+.theme-light .pos-layout .bg-blue-950\/70,
+.theme-light .pos-layout .bg-blue-950\/60,
+.theme-light .pos-layout .bg-blue-950\/55,
+.theme-light .pos-layout .bg-blue-950\/50,
+.theme-light .pos-layout .bg-blue-950\/45,
+.theme-light .pos-layout .bg-blue-950\/40,
+.theme-light .pos-layout .bg-blue-950\/35,
+.theme-light .pos-layout .bg-blue-950\/30,
+.theme-light .pos-layout .bg-blue-950\/20,
+.theme-light .pos-layout .bg-blue-950 {
+  background-color: rgb(226 232 240) !important;
+}
 .theme-light .pos-layout .border-slate-700\/80,
 .theme-light .pos-layout .border-slate-800\/80,
 .theme-light .pos-layout .border-slate-700,
 .theme-light .pos-layout .border-slate-800 {
+  border-color: rgb(203 213 225) !important;
+}
+.theme-light .pos-layout .border-blue-800\/50,
+.theme-light .pos-layout .border-blue-800\/45,
+.theme-light .pos-layout .border-blue-800\/40,
+.theme-light .pos-layout .border-blue-800\/35,
+.theme-light .pos-layout .border-blue-900\/40 {
+  border-color: rgb(203 213 225) !important;
+}
+.theme-light .pos-layout .divide-blue-900\/40 > :not([hidden]) ~ :not([hidden]),
+.theme-light .pos-layout .divide-blue-900\/35 > :not([hidden]) ~ :not([hidden]) {
   border-color: rgb(203 213 225) !important;
 }
 .theme-light .pos-layout a:hover,

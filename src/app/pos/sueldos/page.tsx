@@ -315,7 +315,7 @@ export default function SueldosPage() {
   return (
     <div className="flex flex-col min-h-full text-white">
       {/* Debug bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-slate-800/60 border-b border-slate-700/80">
+      <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-blue-950/50 backdrop-blur-md border-b border-blue-800/45">
         <div className="flex flex-wrap items-center gap-4">
           <span className="text-slate-400 text-sm font-medium">
             Empleados: {empleados.length} | Ingresos: {fm(ingresosTotalesSemanales)} · Costo ventas: {fm(costosSemanales)} · Gastos Admin: {fm(totalGastosAdminSemana)} · Nóminas: {fm(totalNominasPagadasSemana)} · Ganancia neta: {fm(gananciaNetaSemanal)}
@@ -335,7 +335,7 @@ export default function SueldosPage() {
       </div>
 
       {/* Header */}
-      <header className="px-6 py-4 border-b border-slate-700/80">
+      <header className="px-6 py-4 border-b border-blue-800/45">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-slate-600/80 flex items-center justify-center flex-shrink-0">
             <svg className="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -362,22 +362,22 @@ export default function SueldosPage() {
       {/* KPIs */}
       <div className="px-6 py-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-          <div className="rounded-2xl bg-slate-800/80 border border-emerald-500/30 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-emerald-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Ingresos Semanales</p>
             <p className="text-2xl font-bold text-emerald-400 mt-1 tabular-nums">{fm(ingresosTotalesSemanales)}</p>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-slate-600/80 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/40 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Total Sueldos</p>
             <p className="text-2xl font-bold text-white mt-1 tabular-nums">{formatearMoneda(totalSueldos)}</p>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-emerald-500/30 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-emerald-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Ganancia Neta Semanal</p>
             <p className={`text-2xl font-bold mt-1 tabular-nums ${gananciaNetaSemanal >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
               {fm(gananciaNetaSemanal)}
             </p>
             <p className="text-xs text-slate-500 mt-0.5">Ingresos − Costo ventas − Gastos Admin − Nóminas</p>
           </div>
-          <div className="rounded-2xl bg-slate-800/80 border border-violet-500/30 p-5 shadow-elevated">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-violet-500/30 p-5 shadow-elevated">
             <p className="text-slate-400 text-sm font-medium">Efectivo Disponible</p>
             <p className="text-2xl font-bold text-violet-400 mt-1 tabular-nums">{fm(efectivoDisponible)}</p>
           </div>
@@ -418,11 +418,11 @@ export default function SueldosPage() {
 
         {/* Adelantos activos */}
         {adelantosActivos.length > 0 && (
-          <div className="rounded-2xl bg-slate-800/80 border border-amber-500/30 p-5 mb-6">
+          <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-amber-500/30 p-5 mb-6">
             <h3 className="text-slate-300 font-semibold mb-3">Adelantos pendientes de descontar</h3>
             <div className="flex flex-wrap gap-3">
               {adelantosActivos.map((ad) => (
-                <div key={ad.id} className="px-4 py-2 rounded-xl bg-slate-700/80 border border-slate-600 text-sm">
+                <div key={ad.id} className="px-4 py-2 rounded-xl bg-slate-700/80 border border-blue-800/40 text-sm">
                   <span className="text-white font-medium">{ad.nombre}</span>
                   <span className="text-slate-400 mx-2">·</span>
                   <span className="text-amber-400">Debe {fm(ad.saldoPendiente)}</span>
@@ -434,7 +434,7 @@ export default function SueldosPage() {
         )}
 
         {/* Calendario de pagos */}
-        <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 p-5 mb-6">
+        <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 p-5 mb-6">
           <h3 className="text-slate-300 font-semibold mb-4">Calendario de pagos</h3>
           <div className="flex items-center justify-between mb-4">
             <button
@@ -513,10 +513,10 @@ export default function SueldosPage() {
         {fechaDetalle && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setFechaDetalle(null)}>
             <div
-              className="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col"
+              className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="px-6 py-4 border-b border-slate-700 flex items-center justify-between">
+              <div className="px-6 py-4 border-b border-blue-800/40 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-white">
                   Pagos del {new Date(fechaDetalle + 'T12:00:00').toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                 </h2>
@@ -568,7 +568,7 @@ export default function SueldosPage() {
         )}
 
         {/* Lista de trabajadores */}
-        <div className="rounded-2xl bg-slate-800/80 border border-slate-700/80 overflow-hidden shadow-elevated">
+        <div className="rounded-2xl bg-blue-950/55 backdrop-blur-md border border-blue-800/45 overflow-hidden shadow-elevated">
           {empleados.length === 0 ? (
             <div className="py-16 text-center">
               <p className="text-slate-400 font-medium">No hay trabajadores registrados.</p>
@@ -584,7 +584,7 @@ export default function SueldosPage() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-slate-700 bg-slate-800">
+                  <tr className="border-b border-blue-800/40 bg-blue-950/20 backdrop-blur-sm">
                     <th className="text-left text-slate-400 font-semibold text-sm px-6 py-4">Nombre</th>
                     <th className="text-left text-slate-400 font-semibold text-sm px-6 py-4">Puesto</th>
                     <th className="text-right text-slate-400 font-semibold text-sm px-6 py-4">Sueldo semanal</th>
@@ -595,7 +595,7 @@ export default function SueldosPage() {
                 </thead>
                 <tbody>
                   {empleados.map((emp) => (
-                    <tr key={emp.id} className="border-b border-slate-700/50 hover:bg-slate-700/20">
+                    <tr key={emp.id} className="border-b border-blue-900/35 hover:bg-blue-900/25">
                       <td className="px-6 py-3 text-white font-medium">{emp.nombre}</td>
                       <td className="px-6 py-3 text-slate-400 text-sm">{emp.puesto || '—'}</td>
                       <td className="px-6 py-3 text-right font-medium text-emerald-400 tabular-nums">{fm(emp.sueldo)}</td>
@@ -652,10 +652,10 @@ export default function SueldosPage() {
       {modalTrabajador && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={cerrarModalTrabajador}>
           <div
-            className="bg-slate-800 rounded-2xl border border-slate-700 shadow-elevated-lg w-full max-w-md"
+            className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-elevated-lg w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-6 py-4 border-b border-slate-700">
+            <div className="px-6 py-4 border-b border-blue-800/40">
               <h2 className="text-lg font-semibold text-white">
                 {editingId ? 'Editar trabajador' : 'Agregar trabajador'}
               </h2>
@@ -668,7 +668,7 @@ export default function SueldosPage() {
                   value={form.nombre}
                   onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
                   placeholder="Nombre completo"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   required
                 />
               </div>
@@ -681,7 +681,7 @@ export default function SueldosPage() {
                   value={form.sueldo}
                   onChange={(e) => setForm((f) => ({ ...f, sueldo: e.target.value }))}
                   placeholder="0.00"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   required
                 />
               </div>
@@ -692,7 +692,7 @@ export default function SueldosPage() {
                   value={form.puesto}
                   onChange={(e) => setForm((f) => ({ ...f, puesto: e.target.value }))}
                   placeholder="Ej. Cajero, Repartidor"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                 />
               </div>
               <div className="flex gap-3 pt-2">
@@ -719,10 +719,10 @@ export default function SueldosPage() {
       {modalNomina && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setModalNomina(false)}>
           <div
-            className="bg-slate-800 rounded-2xl border border-slate-700 shadow-elevated-lg w-full max-w-lg"
+            className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-elevated-lg w-full max-w-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-6 py-4 border-b border-slate-700">
+            <div className="px-6 py-4 border-b border-blue-800/40">
               <h2 className="text-lg font-semibold text-white">Procesar Nómina</h2>
               <p className="text-slate-400 text-sm mt-0.5">Selecciona trabajadores e indica días trabajados (1-7). El pago es proporcional: sueldo × días ÷ 7. Se registra como pago de la semana en curso.</p>
             </div>
@@ -738,7 +738,7 @@ export default function SueldosPage() {
                 return (
                   <div
                     key={emp.id}
-                    className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-700/50 border border-slate-600/50 hover:bg-slate-700/80"
+                    className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-700/50 border border-blue-800/40/50 hover:bg-slate-700/80"
                   >
                     <div className="flex items-center gap-3">
                       <input
@@ -759,7 +759,7 @@ export default function SueldosPage() {
                           max={7}
                           value={dias}
                           onChange={(e) => setDiasTrabajados(emp.id, Number(e.target.value))}
-                          className="w-14 rounded-lg bg-slate-700 border border-slate-600 px-2 py-1.5 text-white text-center text-sm focus:ring-2 focus:ring-emerald-500"
+                          className="w-14 rounded-lg bg-slate-700 border border-blue-800/40 px-2 py-1.5 text-white text-center text-sm focus:ring-2 focus:ring-emerald-500"
                         />
                       </label>
                       {descuento > 0 && (
@@ -772,7 +772,7 @@ export default function SueldosPage() {
               })
               )}
             </div>
-            <div className="px-6 py-4 border-t border-slate-700 space-y-1">
+            <div className="px-6 py-4 border-t border-blue-800/40 space-y-1">
               {totalDescuentoAdelanto > 0 && (
                 <div className="flex items-center justify-between text-sm text-amber-400">
                   <span>Descuento por adelantos:</span>
@@ -809,10 +809,10 @@ export default function SueldosPage() {
       {modalAdelanto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setModalAdelanto(false)}>
           <div
-            className="bg-slate-800 rounded-2xl border border-slate-700 shadow-elevated-lg w-full max-w-md"
+            className="bg-blue-950/40 backdrop-blur-md rounded-2xl border border-blue-800/40 shadow-elevated-lg w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-6 py-4 border-b border-slate-700">
+            <div className="px-6 py-4 border-b border-blue-800/40">
               <h2 className="text-lg font-semibold text-white">Adelanto de sueldo</h2>
               <p className="text-slate-400 text-sm mt-0.5">Le das sueldo + adelanto hoy. Los adelantos se descontarán de sus siguientes pagos en las semanas que elijas.</p>
             </div>
@@ -822,7 +822,7 @@ export default function SueldosPage() {
                 <select
                   value={formAdelanto.empleadoId}
                   onChange={(e) => setFormAdelanto((f) => ({ ...f, empleadoId: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-amber-500 outline-none"
                   required
                 >
                   <option value="">Seleccionar...</option>
@@ -840,7 +840,7 @@ export default function SueldosPage() {
                   value={formAdelanto.montoTotal}
                   onChange={(e) => setFormAdelanto((f) => ({ ...f, montoTotal: e.target.value }))}
                   placeholder="Ej. 1500"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-amber-500 outline-none"
                   required
                 />
                 <p className="text-slate-500 text-xs mt-1">Este monto se descontará de sus próximas nóminas (no del sueldo de hoy).</p>
@@ -852,7 +852,7 @@ export default function SueldosPage() {
                   min={1}
                   value={formAdelanto.semanas}
                   onChange={(e) => setFormAdelanto((f) => ({ ...f, semanas: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-amber-500 outline-none"
                 />
                 <p className="text-slate-500 text-xs mt-1">Más semanas = menor descuento por semana (menos pesado para el trabajador).</p>
               </div>

@@ -169,7 +169,7 @@ export default function ClientesPage() {
   return (
     <div className="flex flex-col h-full text-white">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-white mb-1">Gestión de Clientes</h1>
@@ -188,7 +188,7 @@ export default function ClientesPage() {
       </div>
 
       {/* Controles */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30 flex flex-wrap items-center gap-4">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm flex flex-wrap items-center gap-4">
         <div className="flex-1 min-w-[250px]">
           <div className="relative">
             <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -199,7 +199,7 @@ export default function ClientesPage() {
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Buscar por nombre, teléfono o email..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
         </div>
@@ -208,7 +208,7 @@ export default function ClientesPage() {
           <select
             value={ordenarPor}
             onChange={(e) => setOrdenarPor(e.target.value as 'compras' | 'ventas' | 'nombre')}
-            className="px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="px-3 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             <option value="compras">Total de Compras</option>
             <option value="ventas">Cantidad de Ventas</option>
@@ -236,9 +236,9 @@ export default function ClientesPage() {
               return (
                 <div
                   key={cliente.id}
-                  className={`bg-slate-800 rounded-xl border ${
-                    esTopCliente ? 'border-green-500/50 bg-green-500/5' : 'border-slate-700'
-                  } overflow-hidden hover:border-slate-600 transition`}
+                  className={`bg-blue-950/40 backdrop-blur-md rounded-xl border ${
+                    esTopCliente ? 'border-green-500/50 bg-green-500/5' : 'border-blue-800/40'
+                  } overflow-hidden hover:border-blue-700/50 transition`}
                 >
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-4">
@@ -302,7 +302,7 @@ export default function ClientesPage() {
                     </div>
 
                     {/* Estadísticas */}
-                    <div className="grid grid-cols-3 gap-3 pt-4 border-t border-slate-700">
+                    <div className="grid grid-cols-3 gap-3 pt-4 border-t border-blue-800/40">
                       <div>
                         <p className="text-xs text-slate-400 mb-1">Total Compras</p>
                         <p className="text-lg font-bold text-green-400">
@@ -329,7 +329,7 @@ export default function ClientesPage() {
       {/* Modal de formulario */}
       {mostrarFormulario && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-xl border border-slate-700 w-full max-w-md p-6">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-white">
                 {clienteEditando ? 'Editar Cliente' : 'Nuevo Cliente'}
@@ -353,7 +353,7 @@ export default function ClientesPage() {
                   type="text"
                   value={formData.nombre}
                   onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="Nombre completo"
                   autoFocus
                 />
@@ -365,7 +365,7 @@ export default function ClientesPage() {
                   type="tel"
                   value={formData.telefono}
                   onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="555-1234"
                 />
               </div>
@@ -376,7 +376,7 @@ export default function ClientesPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="cliente@email.com"
                 />
               </div>
@@ -386,7 +386,7 @@ export default function ClientesPage() {
                 <textarea
                   value={formData.direccion}
                   onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                  className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
                   placeholder="Dirección completa"
                   rows={2}
                 />

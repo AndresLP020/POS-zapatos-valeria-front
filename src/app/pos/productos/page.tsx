@@ -14,7 +14,7 @@ import {
   type Producto,
   type Proveedor,
 } from '@/lib/api';
-import { formatearMoneda, formatearCantidad } from '@/lib/utils';
+import { formatearMoneda, formatearCantidad, capitalizarPrimeraLetra } from '@/lib/utils';
 import { useAdminMode } from '@/contexts/AdminModeContext';
 
 const formInitial = {
@@ -106,7 +106,7 @@ export default function ProductosPage() {
   const guardarProducto = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    const nombre = form.nombre.trim();
+    const nombre = capitalizarPrimeraLetra(form.nombre);
     const precio = parseFloat(form.precio);
     const categoria = form.categoria.trim() || (categorias[0] ?? 'General');
     if (!nombre) {
@@ -255,7 +255,7 @@ export default function ProductosPage() {
   return (
     <div className="flex flex-col h-full text-white">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-2">
           <div>
             <h1 className="text-2xl font-bold text-white mb-1">Gestión de Productos</h1>
@@ -291,21 +291,21 @@ export default function ProductosPage() {
       </div>
 
       {/* Estadísticas */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm">
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
-          <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+          <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-3 border border-blue-800/40">
             <p className="text-xs text-slate-400 mb-1">Total Productos</p>
             <p className="text-xl font-bold text-white">{estadisticas.total}</p>
           </div>
-          <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+          <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-3 border border-blue-800/40">
             <p className="text-xs text-slate-400 mb-1">Activos</p>
             <p className="text-xl font-bold text-green-400">{estadisticas.activos}</p>
           </div>
           <button
             type="button"
             onClick={() => setFiltroStockBajo((prev) => !prev)}
-            className={`bg-slate-800/50 rounded-lg p-3 border text-left transition hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-red-500/50 ${
-              filtroStockBajo ? 'border-red-500 ring-2 ring-red-500/50' : 'border-slate-700'
+            className={`bg-blue-950/45 backdrop-blur-sm rounded-lg p-3 border text-left transition hover:bg-blue-900/45 focus:outline-none focus:ring-2 focus:ring-red-500/50 ${
+              filtroStockBajo ? 'border-red-500 ring-2 ring-red-500/50' : 'border-blue-800/40'
             }`}
           >
             <p className="text-xs text-slate-400 mb-1">Stock Bajo</p>
@@ -316,11 +316,11 @@ export default function ProductosPage() {
           </button>
           {isAdminMode && (
             <>
-              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+              <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-3 border border-blue-800/40">
                 <p className="text-xs text-slate-400 mb-1">Valor Inventario</p>
                 <p className="text-lg font-bold text-blue-400">${formatearMoneda(estadisticas.valorInventario)}</p>
               </div>
-              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+              <div className="bg-blue-950/45 backdrop-blur-sm rounded-lg p-3 border border-blue-800/40">
                 <p className="text-xs text-slate-400 mb-1">Valor Venta</p>
                 <p className="text-lg font-bold text-purple-400">${formatearMoneda(estadisticas.valorVenta)}</p>
               </div>
@@ -330,7 +330,7 @@ export default function ProductosPage() {
       </div>
 
       {/* Controles */}
-      <div className="px-6 py-4 border-b border-slate-700 bg-slate-800/30 flex flex-wrap items-center gap-4">
+      <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/35 backdrop-blur-sm flex flex-wrap items-center gap-4">
         {/* Búsqueda */}
         <div className="flex-1 min-w-[250px]">
           <div className="relative">
@@ -342,7 +342,7 @@ export default function ProductosPage() {
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Buscar productos..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-700 border border-blue-800/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
         </div>
@@ -352,7 +352,7 @@ export default function ProductosPage() {
           <select
             value={categoriaFiltro}
             onChange={(e) => setCategoriaFiltro(e.target.value)}
-            className="pl-10 pr-8 py-2.5 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none cursor-pointer"
+            className="pl-10 pr-8 py-2.5 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none cursor-pointer"
           >
             <option>Todas las categorías</option>
             {categorias.map((c) => (
@@ -370,7 +370,7 @@ export default function ProductosPage() {
         <select
           value={proveedorFiltro === '' ? '' : proveedorFiltro}
           onChange={(e) => setProveedorFiltro(e.target.value === '' ? '' : Number(e.target.value))}
-          className="px-4 py-2.5 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="px-4 py-2.5 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
         >
           <option value="">Todos los proveedores</option>
           {proveedores.map((pr) => (
@@ -386,7 +386,7 @@ export default function ProductosPage() {
           <select
             value={ordenarPor}
             onChange={(e) => setOrdenarPor(e.target.value as any)}
-            className="px-3 py-2.5 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="px-3 py-2.5 rounded-lg bg-slate-700 border border-blue-800/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             <option value="nombre">Nombre</option>
             <option value="precio">Precio</option>
@@ -410,13 +410,13 @@ export default function ProductosPage() {
 
         {/* Botones de acción */}
         <div className="flex gap-2">
-          <button className="px-4 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 border border-slate-600 text-slate-300 flex items-center gap-2 transition text-sm">
+          <button className="px-4 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 border border-blue-800/40 text-slate-300 flex items-center gap-2 transition text-sm">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             Exportar
           </button>
-          <button className="px-4 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 border border-slate-600 text-slate-300 flex items-center gap-2 transition text-sm">
+          <button className="px-4 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 border border-blue-800/40 text-slate-300 flex items-center gap-2 transition text-sm">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
@@ -456,11 +456,11 @@ export default function ProductosPage() {
             )}
           </div>
         ) : vista === 'tabla' ? (
-          <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
+          <div className="bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 overflow-hidden shadow-lg">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-slate-700 bg-slate-900/50">
+                  <tr className="border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
                     <th className="text-left py-4 px-6 text-sm font-semibold text-slate-300">PRODUCTO</th>
                     <th className="text-left py-4 px-6 text-sm font-semibold text-slate-300">CÓDIGO</th>
                     <th className="text-left py-4 px-6 text-sm font-semibold text-slate-300">CATEGORÍA</th>
@@ -477,7 +477,7 @@ export default function ProductosPage() {
                     const estadoStock = getEstadoStock(p.stock, p.stockMinimo);
                     const margenGanancia = p.costo ? ((p.precio - p.costo) / p.costo * 100) : 0;
                     return (
-                      <tr key={p.id} className="border-b border-slate-700/50 hover:bg-slate-700/30 transition">
+                      <tr key={p.id} className="border-b border-blue-900/35 hover:bg-blue-900/30 transition">
                         <td className="py-4 px-6">
                           <div className="font-medium text-white">{p.nombre}</div>
                           {p.codigo && <div className="text-xs text-slate-400 mt-0.5">Código: {p.codigo}</div>}
@@ -555,7 +555,7 @@ export default function ProductosPage() {
               const estadoStock = getEstadoStock(p.stock, p.stockMinimo);
               const margenGanancia = p.costo ? ((p.precio - p.costo) / p.costo * 100) : 0;
               return (
-                <div key={p.id} className="bg-slate-800 rounded-xl border border-slate-700 p-5 hover:border-green-500/50 transition">
+                <div key={p.id} className="bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 p-5 hover:border-green-500/50 transition">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <h3 className="font-bold text-white mb-1">{p.nombre}</h3>
@@ -597,7 +597,7 @@ export default function ProductosPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-700">
+                  <div className="flex items-center justify-between pt-3 border-t border-blue-800/40">
                     <span className={`text-xs font-medium ${estadoStock.color}`}>{estadoStock.texto}</span>
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
                       (p.estado || 'Activo') === 'Activo' 
@@ -609,7 +609,7 @@ export default function ProductosPage() {
                   </div>
 
                   {isAdminMode && (
-                    <div className="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-slate-700">
+                    <div className="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-blue-800/40">
                       <button
                         onClick={() => abrirModalEditar(p)}
                         className="p-2 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition text-sm"
@@ -635,10 +635,10 @@ export default function ProductosPage() {
       {modalAbierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={cerrarModal}>
           <div
-            className="bg-slate-800 rounded-2xl border border-slate-700 shadow-elevated-lg w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            className="bg-blue-950/50 backdrop-blur-xl rounded-2xl border border-blue-800/40 shadow-elevated-lg w-full max-w-lg max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-6 py-4 border-b border-slate-700">
+            <div className="px-6 py-4 border-b border-blue-800/40">
               <h2 className="text-lg font-semibold text-white">
                 {editandoId ? 'Actualizar producto' : 'Agregar producto'}
               </h2>
@@ -651,7 +651,7 @@ export default function ProductosPage() {
                   value={form.nombre}
                   onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
                   placeholder="Ej. Tenis Nike Air Max talla 28"
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   required
                 />
               </div>
@@ -663,7 +663,7 @@ export default function ProductosPage() {
                     value={form.codigo}
                     onChange={(e) => setForm((f) => ({ ...f, codigo: e.target.value }))}
                     placeholder="Opcional: manual o generado"
-                    className="flex-1 rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-sm"
+                    className="flex-1 rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-sm"
                   />
                   <button
                     type="button"
@@ -685,7 +685,7 @@ export default function ProductosPage() {
                   <select
                     value={form.categoria}
                     onChange={(e) => setForm((f) => ({ ...f, categoria: e.target.value }))}
-                    className="flex-1 rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="flex-1 rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                   >
                     <option value="">Seleccionar...</option>
                     {categorias.map((c) => (
@@ -711,7 +711,7 @@ export default function ProductosPage() {
                     value={nuevaCategoria}
                     onChange={(e) => setNuevaCategoria(e.target.value)}
                     placeholder="Nueva categoría..."
-                    className="flex-1 rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="flex-1 rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), crearCategoria())}
                   />
                   <button
@@ -729,7 +729,7 @@ export default function ProductosPage() {
                 <select
                   value={form.proveedorId === '' || form.proveedorId == null ? '' : form.proveedorId}
                   onChange={(e) => setForm((f) => ({ ...f, proveedorId: e.target.value === '' ? '' : Number(e.target.value) }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                 >
                   <option value="">Sin asignar</option>
                   {proveedores.map((pr) => (
@@ -752,7 +752,7 @@ export default function ProductosPage() {
                     value={form.costo}
                     onChange={(e) => setForm((f) => ({ ...f, costo: e.target.value }))}
                     placeholder="0.00"
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   />
                 </div>
                 <div>
@@ -766,7 +766,7 @@ export default function ProductosPage() {
                     value={form.precio}
                     onChange={(e) => setForm((f) => ({ ...f, precio: e.target.value }))}
                     placeholder="0.00"
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                     required
                   />
                 </div>
@@ -783,7 +783,7 @@ export default function ProductosPage() {
                     value={form.stock}
                     onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
                     placeholder="0"
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   />
                 </div>
                 <div>
@@ -797,7 +797,7 @@ export default function ProductosPage() {
                     value={form.stockMinimo}
                     onChange={(e) => setForm((f) => ({ ...f, stockMinimo: e.target.value }))}
                     placeholder="0"
-                    className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                   />
                 </div>
               </div>
@@ -806,7 +806,7 @@ export default function ProductosPage() {
                 <select
                   value={form.estado}
                   onChange={(e) => setForm((f) => ({ ...f, estado: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-700 border border-slate-600 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-xl bg-slate-700 border border-blue-800/40 px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                 >
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
