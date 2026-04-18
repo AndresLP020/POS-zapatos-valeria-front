@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getVentas, getClientes, abonarVenta, type Cliente } from '@/lib/api';
+import { getVentas, getClientes, abonarVenta, postDeudaMigracion, type Cliente } from '@/lib/api';
+import { useAdminMode } from '@/contexts/AdminModeContext';
 import { formatearMoneda } from '@/lib/utils';
 
 type Venta = {
@@ -13,8 +14,13 @@ type Venta = {
   estado?: string;
   cliente?: string;
   clienteId?: number;
-  items: { nombre: string; cantidad: number; precio: number }[];
+  origen?: string;
+  items: { id?: number; nombre: string; cantidad: number; precio: number }[];
 };
+
+function esVentaMigracion(v: Venta) {
+  return v.origen === 'migracion' || v.items?.[0]?.id === -1;
+}
 
 type Deudor = {
   cliente: Cliente;
@@ -23,6 +29,7 @@ type Deudor = {
 };
 
 export default function DeudoresPage() {
+  const { isAdminMode } = useAdminMode();
   const [ventas, setVentas] = useState<Venta[]>([]);
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [deudores, setDeudores] = useState<Deudor[]>([]);
@@ -31,6 +38,12 @@ export default function DeudoresPage() {
   const [ventaAbonando, setVentaAbonando] = useState<number | null>(null);
   const [montoAbono, setMontoAbono] = useState('');
   const [busqueda, setBusqueda] = useState('');
+  const [modalMigracion, setModalMigracion] = useState(false);
+  const [migracionClienteId, setMigracionClienteId] = useState('');
+  const [migracionMonto, setMigracionMonto] = useState('');
+  const [migracionDescripcion, setMigracionDescripcion] = useState('');
+  const [migracionFecha, setMigracionFecha] = useState('');
+  const [guardandoMigracion, setGuardandoMigracion] = useState(false);
 
   useEffect(() => {
     cargarDatos();
@@ -161,6 +174,42 @@ export default function DeudoresPage() {
     }));
   };
 
+  const abrirModalMigracion = () => {
+    setMigracionClienteId(clientes[0] ? String(clientes[0].id) : '');
+    setMigracionMonto('');
+    setMigracionDescripcion('');
+    setMigracionFecha('');
+    setModalMigracion(true);
+  };
+
+  const guardarMigracion = async () => {
+    const cid = Number(migracionClienteId);
+    const monto = parseFloat(migracionMonto);
+    if (!Number.isFinite(cid) || cid <= 0) {
+      alert('Selecciona un cliente');
+      return;
+    }
+    if (!Number.isFinite(monto) || monto <= 0) {
+      alert('Ingresa un monto pendiente válido');
+      return;
+    }
+    setGuardandoMigracion(true);
+    try {
+      await postDeudaMigracion({
+        clienteId: cid,
+        montoPendiente: monto,
+        descripcion: migracionDescripcion.trim() || undefined,
+        fecha: migracionFecha ? new Date(migracionFecha).toISOString() : undefined,
+      });
+      setModalMigracion(false);
+      await cargarDatos();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'No se pudo registrar la deuda');
+    } finally {
+      setGuardandoMigracion(false);
+    }
+  };
+
   const formatearFecha = (f: string) => {
     return new Date(f).toLocaleDateString('es-MX', {
       day: '2-digit',
@@ -179,11 +228,21 @@ export default function DeudoresPage() {
       <div className="flex flex-col h-full text-white">
         {/* Header */}
         <div className="px-6 py-4 border-b border-blue-800/40 bg-blue-950/45 backdrop-blur-sm">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h1 className="text-2xl font-bold text-white mb-1">Gestión de Deudores</h1>
               <p className="text-slate-400 text-sm">Selecciona un deudor para ver su historial de deudas</p>
             </div>
+            {isAdminMode && (
+              <button
+                type="button"
+                onClick={abrirModalMigracion}
+                disabled={clientes.length === 0}
+                className="shrink-0 px-4 py-2.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-200 hover:bg-amber-500/30 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Registrar deuda de libreta
+              </button>
+            )}
           </div>
         </div>
 
@@ -234,6 +293,11 @@ export default function DeudoresPage() {
               </svg>
               <p className="text-slate-400 text-lg">No hay deudores registrados</p>
               <p className="text-slate-500 text-sm mt-1">Todas las ventas están pagadas</p>
+              {isAdminMode && clientes.length > 0 && (
+                <p className="text-slate-500 text-sm mt-2">
+                  Como administrador puedes cargar saldos anteriores con «Registrar deuda de libreta».
+                </p>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -265,6 +329,92 @@ export default function DeudoresPage() {
             </div>
           )}
         </div>
+
+        {modalMigracion && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-blue-950/40 backdrop-blur-md rounded-xl border border-blue-800/40 w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-white">Deuda de libreta (migración)</h2>
+                <button
+                  type="button"
+                  onClick={() => setModalMigracion(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-sm text-slate-400 mb-4">
+                Registra lo que el cliente debía antes de usar el sistema. No afecta inventario; podrás abonar como cualquier venta pendiente.
+              </p>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Cliente</label>
+                  <select
+                    value={migracionClienteId}
+                    onChange={(e) => setMigracionClienteId(e.target.value)}
+                    className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                  >
+                    {clientes.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.nombre}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Monto pendiente</label>
+                  <input
+                    type="number"
+                    min="0.01"
+                    step="0.01"
+                    value={migracionMonto}
+                    onChange={(e) => setMigracionMonto(e.target.value)}
+                    className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                    placeholder="0.00"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Nota (opcional)</label>
+                  <input
+                    type="text"
+                    value={migracionDescripcion}
+                    onChange={(e) => setMigracionDescripcion(e.target.value)}
+                    className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                    placeholder="Ej. saldo abril 2025"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Fecha de referencia (opcional)</label>
+                  <input
+                    type="datetime-local"
+                    value={migracionFecha}
+                    onChange={(e) => setMigracionFecha(e.target.value)}
+                    className="w-full px-4 py-2 rounded-lg bg-slate-700 border border-blue-800/40 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setModalMigracion(false)}
+                  className="flex-1 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-medium transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={guardarMigracion}
+                  disabled={guardandoMigracion}
+                  className="flex-1 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-slate-900 font-semibold transition"
+                >
+                  {guardandoMigracion ? 'Guardando…' : 'Registrar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -333,8 +483,15 @@ export default function DeudoresPage() {
               <div className="p-5 bg-blue-950/45 backdrop-blur-sm border-b border-blue-800/40">
                 <div className="flex items-start justify-between">
                   <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-lg font-bold text-white">Venta #{venta.id}</span>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                      <span className="text-lg font-bold text-white">
+                        {esVentaMigracion(venta) ? 'Deuda registrada' : 'Venta'} #{venta.id}
+                      </span>
+                      {esVentaMigracion(venta) && (
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-300 border border-amber-500/35">
+                          Libreta
+                        </span>
+                      )}
                       <span className="text-sm text-slate-400">{formatearFecha(venta.fecha)}</span>
                     </div>
                   </div>
@@ -354,7 +511,9 @@ export default function DeudoresPage() {
 
               {/* Productos de la venta */}
               <div className="p-5">
-                <h4 className="text-sm font-semibold text-slate-300 mb-3">Productos:</h4>
+                <h4 className="text-sm font-semibold text-slate-300 mb-3">
+                  {esVentaMigracion(venta) ? 'Detalle:' : 'Productos:'}
+                </h4>
                 <div className="space-y-2 mb-4">
                   {venta.items.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between py-2 px-3 rounded-lg bg-slate-700/50 border border-blue-800/40">

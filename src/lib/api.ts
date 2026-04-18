@@ -121,6 +121,27 @@ export async function abonarVenta(ventaId: number, monto: number) {
   return res.json();
 }
 
+/** Deuda cargada manualmente (libreta / migración); no descuenta inventario. */
+export async function postDeudaMigracion(body: {
+  clienteId: number;
+  montoPendiente: number;
+  descripcion?: string;
+  fecha?: string;
+  vendedorId?: number;
+  vendedorNombre?: string;
+}) {
+  const res = await fetch(`${BASE}/api/ventas/deuda-migracion`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error((data as { error?: string }).error || 'Error al registrar deuda de libreta');
+  }
+  return data;
+}
+
 export async function getClientes() {
   const res = await fetch(`${BASE}/api/clientes`);
   if (!res.ok) throw new Error('Error al cargar clientes');

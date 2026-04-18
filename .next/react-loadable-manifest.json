@@ -1,8 +1,44 @@
 {
+  "..\\node_modules\\jspdf\\dist\\jspdf.es.min.js -> canvg": {
+    "id": "..\\node_modules\\jspdf\\dist\\jspdf.es.min.js -> canvg",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_canvg_lib_index_es_js.js"
+    ]
+  },
+  "..\\node_modules\\jspdf\\dist\\jspdf.es.min.js -> dompurify": {
+    "id": "..\\node_modules\\jspdf\\dist\\jspdf.es.min.js -> dompurify",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_dompurify_dist_purify_es_mjs.js"
+    ]
+  },
+  "..\\node_modules\\jspdf\\dist\\jspdf.es.min.js -> html2canvas": {
+    "id": "..\\node_modules\\jspdf\\dist\\jspdf.es.min.js -> html2canvas",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_html2canvas_dist_html2canvas_js.js"
+    ]
+  },
+  "components\\BarcodePreview.tsx -> jsbarcode": {
+    "id": "components\\BarcodePreview.tsx -> jsbarcode",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_jsbarcode_bin_JsBarcode_js.js"
+    ]
+  },
   "components\\GridScan.tsx -> face-api.js": {
     "id": "components\\GridScan.tsx -> face-api.js",
     "files": [
       "static/chunks/_app-pages-browser_node_modules_face-api_js_build_es6_index_js.js"
+    ]
+  },
+  "lib\\barcode-pdf.ts -> jsbarcode": {
+    "id": "lib\\barcode-pdf.ts -> jsbarcode",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_jsbarcode_bin_JsBarcode_js.js"
+    ]
+  },
+  "lib\\barcode-pdf.ts -> jspdf": {
+    "id": "lib\\barcode-pdf.ts -> jspdf",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_jspdf_dist_jspdf_es_min_js.js"
     ]
   }
 }

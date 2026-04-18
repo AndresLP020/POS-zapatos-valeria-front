@@ -1,3 +1,14 @@
 {
-  "/pos/sueldos/page": "app/pos/sueldos/page.js"
+  "/page": "app/page.js",
+  "/pos/deudores/page": "app/pos/deudores/page.js",
+  "/pos/deudas/page": "app/pos/deudas/page.js",
+  "/pos/gastos-admin/page": "app/pos/gastos-admin/page.js",
+  "/pos/configuracion/page": "app/pos/configuracion/page.js",
+  "/pos/sueldos/page": "app/pos/sueldos/page.js",
+  "/pos/ventas/page": "app/pos/ventas/page.js",
+  "/pos/dashboard/page": "app/pos/dashboard/page.js",
+  "/pos/proveedores/page": "app/pos/proveedores/page.js",
+  "/pos/productos/page": "app/pos/productos/page.js",
+  "/pos/bodega-tienda/page": "app/pos/bodega-tienda/page.js",
+  "/pos/codigos-productos/page": "app/pos/codigos-productos/page.js"
 }
